@@ -6,7 +6,9 @@ import {
   UpdateDateColumn,
   BeforeInsert,
 } from 'typeorm';
-import { hashSync } from 'bcryptjs';
+import { hash } from 'bcryptjs';
+
+import { auth } from '../config';
 
 @Entity('users')
 class User {
@@ -29,8 +31,8 @@ class User {
   updatedAt: Date;
 
   @BeforeInsert()
-  hashPassword(): void {
-    this.password = hashSync(this.password, 10);
+  async hashPassword(): Promise<void> {
+    this.password = await hash(this.password, auth.bcrypt.saltRounds);
   }
 }
 
