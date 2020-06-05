@@ -2,9 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 import { getCustomRepository } from 'typeorm';
 
-import { auth } from '../config';
-import { User } from '../models';
+import { GoBarberException } from '../exceptions';
 import { UsersRepository } from '../repositories';
+import { User } from '../models';
+import { auth } from '../config';
 
 interface TokenPayload {
   iat: number;
@@ -20,7 +21,7 @@ function ensureAutenthicated(
 ): void {
   const authHeader = request.headers.authorization;
 
-  if (!authHeader) throw Error('JWT token is missing');
+  if (!authHeader) throw new GoBarberException('JWT token is missing', 401);
 
   const [, token] = authHeader.split(' ');
 
@@ -41,7 +42,7 @@ function ensureAutenthicated(
 
     return next();
   } catch {
-    throw Error('Invalid JWT token');
+    throw new GoBarberException('Invalid JWT token', 401);
   }
 }
 

@@ -2,9 +2,10 @@ import { getCustomRepository } from 'typeorm';
 import { join } from 'path';
 import fs from 'fs';
 
-import { upload as uploadConfig } from '../config';
 import { UsersRepository } from '../repositories';
+import { GoBarberException } from '../exceptions';
 import { User } from '../models';
+import { upload as uploadConfig } from '../config';
 
 interface Request {
   user_id: string;
@@ -17,7 +18,11 @@ export default class UpdateUserAvatarService {
 
     const user = await usersRepository.findOne(user_id);
 
-    if (!user) throw Error('Only authenticated users can change avatar');
+    if (!user)
+      throw new GoBarberException(
+        'Only authenticated users can change avatar',
+        401,
+      );
 
     if (user.avatar) {
       const userAvatarFilePath = join(uploadConfig.directory, user.avatar);

@@ -3,6 +3,7 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
 import { UsersRepository } from '../repositories';
+import { GoBarberException } from '../exceptions';
 import { User } from '../models';
 import { auth } from '../config';
 
@@ -22,11 +23,13 @@ export default class AuthenticateUserService {
 
     const user = await usersRepository.findByEmail(email);
 
-    if (!user) throw Error('Incorrect email/password combination');
+    if (!user)
+      throw new GoBarberException('Incorrect email/password combination', 401);
 
     const passwordMatched = await compare(password, user.password);
 
-    if (!passwordMatched) throw Error('Incorrect email/password combination');
+    if (!passwordMatched)
+      throw new GoBarberException('Incorrect email/password combination', 401);
 
     const { secret, expiresIn } = auth.jwt;
 

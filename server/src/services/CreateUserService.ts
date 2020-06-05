@@ -1,6 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 
 import { UsersRepository } from '../repositories';
+import { GoBarberException } from '../exceptions';
 import { User } from '../models';
 
 interface Request {
@@ -15,7 +16,8 @@ export default class CreateUserService {
 
     const checkUsersExists = await usersRepository.findByEmail(email);
 
-    if (checkUsersExists) throw Error('Email address already used');
+    if (checkUsersExists)
+      throw new GoBarberException('Email address already used', 400);
 
     const user = usersRepository.create({ name, email, password });
 

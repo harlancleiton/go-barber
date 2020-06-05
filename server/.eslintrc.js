@@ -24,6 +24,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     camelcase: 'off',
     'import/extensions': ['error', 'ignorePackages', { ts: 'never' }],
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '_' }],
   },
   settings: {
     'import/resolver': {

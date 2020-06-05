@@ -3,6 +3,7 @@ import { getCustomRepository } from 'typeorm';
 
 import { Appointment } from '../models';
 import { AppointmentsRepository } from '../repositories';
+import { GoBarberException } from '../exceptions';
 
 interface Request {
   provider_id: string;
@@ -20,7 +21,7 @@ class CreateAppointmentService {
     );
 
     if (findAppoitmentInSameDate)
-      throw Error('This appointment is already booked');
+      throw new GoBarberException('This appointment is already booked', 400);
 
     const appointment = appointmentsRepository.create({
       provider: { id: provider_id },
