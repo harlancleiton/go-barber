@@ -1,7 +1,7 @@
 import { randomBytes } from 'crypto';
 import multer from 'multer';
 
-import { path } from '../helpers';
+import { path } from '../shared/helpers';
 
 export default {
   directory: path.tmpPath(),

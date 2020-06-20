@@ -8,10 +8,10 @@ import {
 } from 'typeorm';
 import { hash } from 'bcryptjs';
 
-import { auth } from '../config';
+import { auth } from '../../../config';
 
 @Entity('users')
-class User {
+export default class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -38,5 +38,3 @@ class User {
     this.password = await hash(this.password, auth.bcrypt.saltRounds);
   }
 }
-
-export default User;

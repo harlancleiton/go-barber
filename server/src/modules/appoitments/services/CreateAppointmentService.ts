@@ -1,9 +1,9 @@
 import { startOfHour } from 'date-fns';
 import { getCustomRepository } from 'typeorm';
 
-import { Appointment } from '../models';
+import { Appointment } from '../entities';
 import { AppointmentsRepository } from '../repositories';
-import { GoBarberException } from '../exceptions';
+import { GoBarberException } from '../../../shared/exceptions';
 
 interface Request {
   provider_id: string;

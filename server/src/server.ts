@@ -2,9 +2,9 @@ import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 
 import './database';
-import routes from './routes';
-import { path } from './helpers';
-import { GoBarberException } from './exceptions';
+import routes from './shared/routes';
+import { path } from './shared/helpers';
+import { GoBarberException } from './shared/exceptions';
 
 const app = express();
 

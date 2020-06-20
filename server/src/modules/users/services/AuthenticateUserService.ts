@@ -2,10 +2,10 @@ import { getCustomRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
-import { UsersRepository } from '../repositories';
-import { GoBarberException } from '../exceptions';
-import { User } from '../models';
-import { auth } from '../config';
+import { GoBarberException } from '../../../shared/exceptions';
+import { User } from '../entities';
+import { auth } from '../../../config';
+import { UsersRepository } from '..';
 
 interface Request {
   email: string;

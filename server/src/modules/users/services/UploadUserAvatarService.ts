@@ -3,9 +3,9 @@ import { join } from 'path';
 import fs from 'fs';
 
 import { UsersRepository } from '../repositories';
-import { GoBarberException } from '../exceptions';
-import { User } from '../models';
-import { upload as uploadConfig } from '../config';
+import { GoBarberException } from '../../../shared/exceptions';
+import { User } from '../entities';
+import { upload as uploadConfig } from '../../../config';
 
 interface Request {
   user_id: string;

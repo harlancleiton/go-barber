@@ -2,10 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 import { getCustomRepository } from 'typeorm';
 
+import { auth } from '../../config';
+import { UsersRepository, User } from '../../modules/users';
 import { GoBarberException } from '../exceptions';
-import { UsersRepository } from '../repositories';
-import { User } from '../models';
-import { auth } from '../config';
 
 interface TokenPayload {
   iat: number;

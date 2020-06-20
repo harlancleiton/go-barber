@@ -4,6 +4,6 @@ export default {
     expiresIn: '3d',
   },
   bcrypt: {
-    saltRounds: String(process.env.PASSWORD_SALT_ROUNDS || 10),
+    saltRounds: Number(process.env.PASSWORD_SALT_ROUNDS || 10),
   },
 };

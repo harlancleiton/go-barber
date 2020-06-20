@@ -1,8 +1,8 @@
 import { getCustomRepository } from 'typeorm';
 
+import { GoBarberException } from '../../../shared/exceptions';
+import { User } from '../entities';
 import { UsersRepository } from '../repositories';
-import { GoBarberException } from '../exceptions';
-import { User } from '../models';
 
 interface Request {
   name: string;
