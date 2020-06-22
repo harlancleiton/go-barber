@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { GlobalStyle } from './styles';
-import { SignIn } from './pages';
+import { SignUp } from './pages';
 
 export default function App(): React.ReactElement {
   return (
     <>
-      <SignIn />
+      <SignUp />
       <GlobalStyle />
     </>
   );
