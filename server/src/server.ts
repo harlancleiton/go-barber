@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import 'express-async-errors';
 
 import './database';
@@ -8,6 +9,7 @@ import { GoBarberException } from './shared/exceptions';
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.use('/files', express.static(path.tmpPath()));
