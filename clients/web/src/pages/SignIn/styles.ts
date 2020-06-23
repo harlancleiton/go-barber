@@ -4,7 +4,7 @@ import { shade } from 'polished';
 import signInBackgroundImg from '../../assets/sign-in-background.png';
 
 export const Container = styled.div`
-  min-height: 100vh;
+  height: 100vh;
 
   display: flex;
   align-items: stretch;
@@ -20,7 +20,7 @@ export const Content = styled.div`
   max-width: 700px;
 
   form {
-    margin: 80px 0;
+    margin: 60px 0;
     width: 340px;
     text-align: center;
 
