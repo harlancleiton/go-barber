@@ -23,7 +23,7 @@ const Route: React.FC<RouteProps> = ({
     <BaseRoute
       {...rest}
       render={({ location }) => {
-        if (isPrivate && signed) return <Component />;
+        if (isPrivate === signed) return <Component />;
 
         if (isPrivate && !signed)
           return <Redirect to={{ pathname: '/', state: { from: location } }} />;

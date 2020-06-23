@@ -40,17 +40,19 @@ const SignIn: React.FC = () => {
         const { email, password } = formData;
         await signIn({ email, password });
       } catch (error) {
-        addToast({
-          title: 'Erro na autenticação',
-          type: 'error',
-          description: 'Ocorreu um erro ao fazer login, cheque as credenciais',
-        });
-
         if (error instanceof Yup.ValidationError) {
           const validationErrors = getValidationErrors(error);
 
           formRef.current?.setErrors(validationErrors);
+
+          return;
         }
+
+        addToast({
+          title: 'Erro na autenticação',
+          type: 'error',
+          description: 'Ocorreu um erro ao fazer logon, cheque as credenciais',
+        });
       }
     },
     [addToast, signIn]
@@ -61,7 +63,7 @@ const SignIn: React.FC = () => {
       <Content>
         <img src={logoImg} alt="GoBarber" />
 
-        <Form ref={formRef} onSubmit={handleSubmit}>
+        <Form ref={formRef} onSubmit={handleSubmit} noValidate>
           <h1>Faça seu logon</h1>
 
           <Input name="email" icon={FiMail} type="email" placeholder="E-mail" />
