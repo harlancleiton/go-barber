@@ -6,8 +6,9 @@ import * as Yup from 'yup';
 
 import logoImg from '../../assets/logo.svg';
 
-import { getValidationErrors } from '../../utils';
 import { Button, Input } from '../../components';
+import { useAuth } from '../../hooks';
+import { getValidationErrors } from '../../utils';
 import { Container, Content, Background } from './styles';
 
 interface FormData {
@@ -18,13 +19,14 @@ interface FormData {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
+  const { signIn } = useAuth();
+
   const handleSubmit: SubmitHandler<FormData> = useCallback(
     async (formData) => {
       try {
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
-          name: Yup.string().required('Nome é obrigatório'),
           email: Yup.string()
             .email('Digite um e-mail válido')
             .required('E-mail é obrigatório'),
@@ -32,7 +34,11 @@ const SignIn: React.FC = () => {
         });
 
         await schema.validate(formData, { abortEarly: false });
+
+        const { email, password } = formData;
+        await signIn({ email, password });
       } catch (error) {
+        console.log(error.response);
         if (error instanceof Yup.ValidationError) {
           const validationErrors = getValidationErrors(error);
 
@@ -40,7 +46,7 @@ const SignIn: React.FC = () => {
         }
       }
     },
-    []
+    [signIn]
   );
 
   return (

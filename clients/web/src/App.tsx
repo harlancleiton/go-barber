@@ -1,12 +1,15 @@
 import React from 'react';
 
-import { GlobalStyle } from './styles';
+import { AuthProvider } from './hooks';
 import { SignIn } from './pages';
+import { GlobalStyle } from './styles';
 
 export default function App(): React.ReactElement {
   return (
     <>
-      <SignIn />
+      <AuthProvider>
+        <SignIn />
+      </AuthProvider>
       <GlobalStyle />
     </>
   );
