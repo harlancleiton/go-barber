@@ -3,17 +3,27 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar, Text } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
+import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import FlashMessage from 'react-native-flash-message';
 
 import RobotoSlabMedium from '../assets/fonts/RobotoSlab-Medium.ttf';
 import RobotoSlabRegular from '../assets/fonts/RobotoSlab-Regular.ttf';
 
+import { AppProvider } from './hooks';
 import Routes from './routes';
 import { FontFamily } from './utils';
 
 const App: React.FC = () => {
   const [loadingFonts, setLoadingFonts] = useState(true);
+
+  useEffect(() => {
+    async function preventSplashScreen() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+
+    preventSplashScreen();
+  }, []);
 
   useEffect(() => {
     async function loadFonts() {
@@ -41,7 +51,9 @@ const App: React.FC = () => {
               translucent
             />
 
-            <Routes />
+            <AppProvider>
+              <Routes />
+            </AppProvider>
             <FlashMessage position="bottom" floating />
           </NavigationContainer>
         )}

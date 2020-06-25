@@ -14,6 +14,7 @@ import * as Yup from 'yup';
 import LogoImg from '../../../assets/logo.png';
 
 import { Button, Input } from '../../components';
+import { useAuth } from '../../hooks';
 import { getValidationErrors } from '../../utils';
 import {
   Container,
@@ -31,6 +32,7 @@ interface SignInFormData {
 
 const SignIn: React.FC = () => {
   const navigation = useNavigation();
+  const { signIn } = useAuth();
 
   const formRef = useRef<FormHandles>(null);
 
@@ -51,6 +53,9 @@ const SignIn: React.FC = () => {
         });
 
         await schema.validate(formData, { abortEarly: false });
+
+        const { email, password } = formData;
+        await signIn({ email, password });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const validationErrors = getValidationErrors(error);
@@ -59,7 +64,7 @@ const SignIn: React.FC = () => {
         }
       }
     },
-    []
+    [signIn]
   );
 
   return (
