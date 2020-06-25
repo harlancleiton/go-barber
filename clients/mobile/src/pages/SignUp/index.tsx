@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
+import { SubmitHandler, FormHandles } from '@unform/core';
+import { Form } from '@unform/mobile';
 
 import LogoImg from '../../../assets/logo.png';
 
@@ -19,14 +21,30 @@ import {
   BackToSignInButtonText,
 } from './styles';
 
+interface SignUpFormData {
+  name: string;
+  email: string;
+  password: string;
+}
+
 const SignUp: React.FC = () => {
   const navigation = useNavigation();
 
   const [keyboardOpen, setKeyboardOpen] = useState(false);
 
+  const formRef = useRef<FormHandles>(null);
+
   const handleSignInNavigation = useCallback(() => {
     navigation.navigate('SignIn');
   }, [navigation]);
+
+  const handleSubmit = useCallback<SubmitHandler<SignUpFormData>>(
+    (formData) => {
+      // eslint-disable-next-line no-console
+      console.log(formData);
+    },
+    []
+  );
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => setKeyboardOpen(true));
@@ -48,20 +66,35 @@ const SignUp: React.FC = () => {
             <Image source={LogoImg} />
             <Title>Crie sua conta</Title>
 
-            <Input name="name" icon="user" placeholder="Nome" />
-            <Input
-              name="email"
-              icon="mail"
-              placeholder="E-mail"
-              keyboardType="email-address"
-            />
-            <Input
-              name="password"
-              icon="lock"
-              placeholder="Senha"
-              secureTextEntry
-            />
-            <Button>Entrar</Button>
+            <Form ref={formRef} onSubmit={handleSubmit}>
+              <Input
+                name="name"
+                icon="user"
+                placeholder="Nome"
+                autoCapitalize="words"
+              />
+              <Input
+                name="email"
+                icon="mail"
+                placeholder="E-mail"
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+              <Input
+                name="password"
+                icon="lock"
+                placeholder="Senha"
+                secureTextEntry
+                autoCapitalize="none"
+              />
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm();
+                }}
+              >
+                Criar conta
+              </Button>
+            </Form>
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>
