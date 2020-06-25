@@ -1,9 +1,10 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
 import { StatusBar, Text } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import * as Font from 'expo-font';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import FlashMessage from 'react-native-flash-message';
 
 import RobotoSlabMedium from '../assets/fonts/RobotoSlab-Medium.ttf';
 import RobotoSlabRegular from '../assets/fonts/RobotoSlab-Regular.ttf';
@@ -41,6 +42,7 @@ const App: React.FC = () => {
             />
 
             <Routes />
+            <FlashMessage position="bottom" floating />
           </NavigationContainer>
         )}
       </SafeAreaView>

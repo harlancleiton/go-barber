@@ -14,7 +14,8 @@ import * as Yup from 'yup';
 import LogoImg from '../../../assets/logo.png';
 
 import { Button, Input } from '../../components';
-import { getValidationErrors } from '../../utils';
+import { api } from '../../services';
+import { getValidationErrors, showMessage } from '../../utils';
 import {
   Container,
   Title,
@@ -34,7 +35,7 @@ const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
   const handleSignInNavigation = useCallback(() => {
-    navigation.navigate('SignIn');
+    navigation.goBack();
   }, [navigation]);
 
   const handleSubmit: SubmitHandler<SignUpFormData> = useCallback(
@@ -51,6 +52,13 @@ const SignUp: React.FC = () => {
         });
 
         await schema.validate(formData, { abortEarly: false });
+
+        const { email, name, password } = formData;
+
+        await api.post('users', { email, name, password });
+
+        showMessage({ message: 'Cadastro efetuado com sucesso' });
+        handleSignInNavigation();
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const validationErrors = getValidationErrors(error);
@@ -59,7 +67,7 @@ const SignUp: React.FC = () => {
         }
       }
     },
-    []
+    [handleSignInNavigation]
   );
 
   return (
