@@ -1,19 +1,20 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Keyboard,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { SubmitHandler, FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
+import * as Yup from 'yup';
 
 import LogoImg from '../../../assets/logo.png';
 
 import { Button, Input } from '../../components';
+import { getValidationErrors } from '../../utils';
 import {
   Container,
   Title,
@@ -30,84 +31,100 @@ interface SignUpFormData {
 const SignUp: React.FC = () => {
   const navigation = useNavigation();
 
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-
   const formRef = useRef<FormHandles>(null);
 
   const handleSignInNavigation = useCallback(() => {
     navigation.navigate('SignIn');
   }, [navigation]);
 
-  const handleSubmit = useCallback<SubmitHandler<SignUpFormData>>(
-    (formData) => {
-      // eslint-disable-next-line no-console
-      console.log(formData);
+  const handleSubmit: SubmitHandler<SignUpFormData> = useCallback(
+    async (formData) => {
+      try {
+        formRef.current?.setErrors({});
+
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Nome é obrigatório'),
+          email: Yup.string()
+            .email('Digite um e-mail válido')
+            .required('E-mail é obrigatório'),
+          password: Yup.string().min(6, 'No mínimo 6 caracteres'),
+        });
+
+        await schema.validate(formData, { abortEarly: false });
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const validationErrors = getValidationErrors(error);
+
+          formRef.current?.setErrors(validationErrors);
+        }
+      }
     },
     []
   );
 
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', () => setKeyboardOpen(true));
-
-    Keyboard.addListener('keyboardDidHide', () => setKeyboardOpen(false));
-  }, []);
-
   return (
-    <>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1 }}
       >
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ flex: 1 }}
-        >
-          <Container>
-            <Image source={LogoImg} />
-            <Title>Crie sua conta</Title>
+        <Container>
+          <Image source={LogoImg} />
+          <Title>Crie sua conta</Title>
 
-            <Form ref={formRef} onSubmit={handleSubmit}>
-              <Input
-                name="name"
-                icon="user"
-                placeholder="Nome"
-                autoCapitalize="words"
-              />
-              <Input
-                name="email"
-                icon="mail"
-                placeholder="E-mail"
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-              <Input
-                name="password"
-                icon="lock"
-                placeholder="Senha"
-                secureTextEntry
-                autoCapitalize="none"
-              />
-              <Button
-                onPress={() => {
-                  formRef.current?.submitForm();
-                }}
-              >
-                Criar conta
-              </Button>
-            </Form>
-          </Container>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          <Form ref={formRef} onSubmit={handleSubmit} style={{ width: '100%' }}>
+            <Input
+              name="name"
+              icon="user"
+              placeholder="Nome"
+              autoCapitalize="words"
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                formRef.current?.getFieldRef('email').focus();
+              }}
+            />
+            <Input
+              name="email"
+              icon="mail"
+              placeholder="E-mail"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                formRef.current?.getFieldRef('password').focus();
+              }}
+            />
+            <Input
+              name="password"
+              icon="lock"
+              placeholder="Senha"
+              secureTextEntry
+              autoCapitalize="none"
+              onSubmitEditing={() => {
+                formRef.current?.submitForm();
+              }}
+            />
+            <Button
+              onPress={() => {
+                formRef.current?.submitForm();
+              }}
+            >
+              Criar conta
+            </Button>
+          </Form>
+        </Container>
 
-      {!keyboardOpen && Platform.OS === 'android' && (
         <BackToSignInButton onPress={handleSignInNavigation}>
           <>
             <Feather name="arrow-left" size={20} color="#fff" />
             <BackToSignInButtonText>Voltar para logon</BackToSignInButtonText>
           </>
         </BackToSignInButton>
-      )}
-    </>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
