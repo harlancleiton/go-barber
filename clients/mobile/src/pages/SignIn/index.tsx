@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -6,6 +6,7 @@ import {
   ScrollView,
   Keyboard,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
 import LogoImg from '../../../assets/logo.png';
@@ -21,7 +22,13 @@ import {
 } from './styles';
 
 const SignIn: React.FC = () => {
+  const navigation = useNavigation();
+
   const [keyboardOpen, setKeyboardOpen] = useState(false);
+
+  const handleSignUpNavigation = useCallback(() => {
+    navigation.navigate('SignUp');
+  }, [navigation]);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => setKeyboardOpen(true));
@@ -69,7 +76,7 @@ const SignIn: React.FC = () => {
       </KeyboardAvoidingView>
 
       {!keyboardOpen && Platform.OS === 'android' && (
-        <CreateAccountButton>
+        <CreateAccountButton onPress={handleSignUpNavigation}>
           <>
             <Feather name="log-in" size={20} color="#ff9000" />
             <CreateAccountButtonText>Criar uma conta</CreateAccountButtonText>
