@@ -4,7 +4,7 @@ import fs from 'fs';
 
 import { UsersRepository } from '../repositories';
 import { GoBarberException } from '../../../shared/exceptions';
-import { User } from '../entities';
+import { User } from '../infra/typeorm/entities';
 import { upload as uploadConfig } from '../../../config';
 
 interface Request {

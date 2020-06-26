@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 
 function appRoot(): string {
-  return resolve(__dirname, '..');
+  return resolve(process.cwd(), 'src');
 }
 
 function tmpPath(): string {

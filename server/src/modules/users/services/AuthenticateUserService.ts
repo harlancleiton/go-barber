@@ -3,9 +3,9 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
 import { GoBarberException } from '../../../shared/exceptions';
-import { User } from '../entities';
+import { User } from '../infra/typeorm/entities';
 import { auth } from '../../../config';
-import { UsersRepository } from '..';
+import { UsersRepository } from '../repositories';
 
 interface Request {
   email: string;

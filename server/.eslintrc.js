@@ -23,6 +23,7 @@ module.exports = {
     'prettier/prettier': 'error',
     'class-methods-use-this': 'off',
     camelcase: 'off',
+    'import/prefer-default-export': 'off',
     'import/extensions': ['error', 'ignorePackages', { ts: 'never' }],
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '_' }],
   },

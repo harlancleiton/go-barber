@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { hash } from 'bcryptjs';
 
-import { auth } from '../../../config';
+import { auth } from '../../../../../config';
 
 @Entity('users')
 export default class User {

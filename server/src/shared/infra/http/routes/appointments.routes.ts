@@ -6,7 +6,7 @@ import { ensureAuthenticated } from '../middlewares';
 import {
   CreateAppointmentService,
   AppointmentsRepository,
-} from '../../modules/appoitments';
+} from '../../../../modules/appoitments';
 
 const appointmentsRouter = Router();
 const createAppointment = new CreateAppointmentService();

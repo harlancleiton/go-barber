@@ -1,7 +1,7 @@
 import { startOfHour } from 'date-fns';
 import { getCustomRepository } from 'typeorm';
 
-import { Appointment } from '../entities';
+import { Appointment } from '../infra';
 import { AppointmentsRepository } from '../repositories';
 import { GoBarberException } from '../../../shared/exceptions';
 

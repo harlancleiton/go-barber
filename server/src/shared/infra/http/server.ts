@@ -2,10 +2,10 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import 'express-async-errors';
 
-import './database';
-import routes from './shared/routes';
-import { path } from './shared/helpers';
-import { GoBarberException } from './shared/exceptions';
+import '../database';
+import routes from './routes';
+import { path } from '../../helpers';
+import { GoBarberException } from '../../exceptions';
 
 const app = express();
 
