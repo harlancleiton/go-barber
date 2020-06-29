@@ -12,6 +12,8 @@ import { Container, TextInput, Icon } from './styles';
 export interface InputProps extends TextInputProps {
   name: string;
   icon: string;
+  rawText?: string;
+  onInitialData?(text: string): void;
 }
 
 export interface InputReference extends TextInputBase {
@@ -24,6 +26,8 @@ const Input: React.FC<InputProps> = ({
   onChangeText,
   onFocus,
   onBlur,
+  rawText,
+  onInitialData,
   ...rest
 }) => {
   const inputRef = useRef<InputReference>(null);
@@ -58,10 +62,16 @@ const Input: React.FC<InputProps> = ({
   }, [defaultValue]);
 
   useEffect(() => {
+    if (onInitialData) onInitialData(defaultValue);
+  }, [defaultValue, onInitialData]);
+
+  useEffect(() => {
     registerField<string>({
       name: fieldName,
       ref: inputRef.current,
       getValue() {
+        if (rawText) return rawText;
+
         if (inputRef.current) return inputRef.current.value;
 
         return '';
@@ -79,7 +89,7 @@ const Input: React.FC<InputProps> = ({
         }
       },
     });
-  }, [fieldName, onChangeText, registerField]);
+  }, [fieldName, rawText, registerField]);
 
   const handleChangeText = useCallback(
     (value: string) => {
