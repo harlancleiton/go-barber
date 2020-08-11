@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import multer from 'multer';
 
-import { upload as uploadConfig } from '../../../../../config';
+import { uploadConfig } from '../../../../../config';
 import { CreateUserService, UploadUserAvatarService } from '../../../services';
-import UsersRepository from '../../typeorm/repositories/UsersRepository';
+import { UsersRepository } from '../../typeorm/repositories/UsersRepository';
 import { ensureAuthenticated } from '../middlewares';
 
 const usersRouter = Router();
@@ -41,4 +41,4 @@ usersRouter.patch(
   },
 );
 
-export default usersRouter;
+export { usersRouter };

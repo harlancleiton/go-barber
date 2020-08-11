@@ -1,1 +1,1 @@
-export { default as ICreateAppointmentDTO } from './ICreateAppointmentDTO';
+export * from './ICreateAppointmentDto';

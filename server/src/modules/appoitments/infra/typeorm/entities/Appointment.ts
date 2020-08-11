@@ -11,7 +11,7 @@ import {
 import { User } from '../../../../users';
 
 @Entity('appointments')
-export default class Appointment {
+export class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

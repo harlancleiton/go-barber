@@ -1,4 +1,4 @@
-export default {
+export const authConfig = {
   jwt: {
     secret: String(process.env.APP_KEY),
     expiresIn: '3d',

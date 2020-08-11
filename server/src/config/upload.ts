@@ -3,7 +3,7 @@ import multer from 'multer';
 
 import { path } from '../shared/helpers';
 
-export default {
+export const uploadConfig = {
   directory: path.tmpPath(),
   storage: multer.diskStorage({
     destination: path.tmpPath(),

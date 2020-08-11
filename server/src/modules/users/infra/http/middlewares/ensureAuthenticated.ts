@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 
-import { auth } from '../../../../../config';
+import { authConfig } from '../../../../../config';
 import { GoBarberException } from '../../../../../shared/exceptions';
 import UsersRepository from '../../typeorm/repositories/UsersRepository';
 
@@ -24,7 +24,7 @@ function ensureAutenthicated(
   const [, token] = authHeader.split(' ');
 
   try {
-    const decoded = verify(token, auth.jwt.secret) as TokenPayload;
+    const decoded = verify(token, authConfig.jwt.secret) as TokenPayload;
 
     request.auth = {
       token: decoded,

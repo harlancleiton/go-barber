@@ -9,7 +9,7 @@ interface Request {
   date: Date;
 }
 
-class CreateAppointmentService {
+export class CreateAppointmentService {
   constructor(
     private readonly appointmentsRepository: IAppointmentsRepository,
   ) {}
@@ -32,5 +32,3 @@ class CreateAppointmentService {
     return appointment;
   }
 }
-
-export default CreateAppointmentService;

@@ -8,4 +8,4 @@ function tmpPath(): string {
   return resolve(appRoot(), '..', 'tmp');
 }
 
-export default { appRoot, tmpPath };
+export { appRoot, tmpPath };

@@ -1,3 +1,3 @@
-export { default as AuthenticateUserService } from './AuthenticateUserService';
-export { default as CreateUserService } from './CreateUserService';
-export { default as UploadUserAvatarService } from './UploadUserAvatarService';
+export * from './AuthenticateUserService';
+export * from './CreateUserService';
+export * from './UploadUserAvatarService';

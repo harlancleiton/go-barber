@@ -8,7 +8,7 @@ interface Request {
   password: string;
 }
 
-export default class CreateUserService {
+export class CreateUserService {
   constructor(private readonly usersRepository: IUsersRepository) {}
 
   public async execute({ name, email, password }: Request): Promise<User> {

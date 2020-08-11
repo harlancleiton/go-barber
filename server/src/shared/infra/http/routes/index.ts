@@ -11,4 +11,4 @@ routes.use('/users', usersRouter);
 
 routes.use('/auth', authRouter);
 
-export default routes;
+export { routes };

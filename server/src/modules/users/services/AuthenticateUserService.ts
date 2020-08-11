@@ -1,7 +1,7 @@
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
-import { auth } from '../../../config';
+import { authConfig } from '../../../config';
 import { GoBarberException } from '../../../shared/exceptions';
 import { User } from '../infra/typeorm/entities';
 import { IUsersRepository } from '../repositories';
@@ -16,7 +16,7 @@ interface Response {
   token: string;
 }
 
-export default class AuthenticateUserService {
+export class AuthenticateUserService {
   constructor(private readonly usersRepository: IUsersRepository) {}
 
   public async execute({ email, password }: Request): Promise<Response> {
@@ -30,7 +30,7 @@ export default class AuthenticateUserService {
     if (!passwordMatched)
       throw new GoBarberException('Incorrect email/password combination', 401);
 
-    const { secret, expiresIn } = auth.jwt;
+    const { secret, expiresIn } = authConfig.jwt;
 
     const token = sign({}, secret, {
       subject: user.id,

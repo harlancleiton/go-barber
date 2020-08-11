@@ -4,15 +4,15 @@ import 'express-async-errors';
 
 import '../typeorm';
 import { GoBarberException } from '../../exceptions';
-import { path } from '../../helpers';
-import routes from './routes';
+import { tmpPath } from '../../helpers';
+import { routes } from './routes';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use('/files', express.static(path.tmpPath()));
+app.use('/files', express.static(tmpPath()));
 
 app.use(routes);
 

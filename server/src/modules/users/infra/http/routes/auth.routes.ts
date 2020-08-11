@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { AuthenticateUserService } from '../../../services';
-import UsersRepository from '../../typeorm/repositories/UsersRepository';
+import { UsersRepository } from '../../typeorm/repositories/UsersRepository';
 
 const authRouter = Router();
 
@@ -19,4 +19,4 @@ authRouter.post('/login', async (request, response) => {
   return response.status(201).json({ user, token });
 });
 
-export default authRouter;
+export { authRouter };

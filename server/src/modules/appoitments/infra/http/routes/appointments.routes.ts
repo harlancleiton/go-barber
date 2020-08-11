@@ -34,4 +34,4 @@ appointmentsRouter.post('/', async (request, response) => {
 //   return response.json(appointments);
 // });
 
-export default appointmentsRouter;
+export { appointmentsRouter };

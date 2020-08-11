@@ -1,1 +1,1 @@
-export { default as appointmentsRouter } from './appointments.routes';
+export * from './appointments.routes';

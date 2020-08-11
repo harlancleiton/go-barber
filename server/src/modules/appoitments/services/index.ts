@@ -1,1 +1,1 @@
-export { default as CreateAppointmentService } from './CreateAppointmentService';
+export * from './CreateAppointmentService';

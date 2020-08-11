@@ -4,7 +4,7 @@ import { ICreateUserDto } from '../../../dtos';
 import { IUsersRepository } from '../../../repositories';
 import { User } from '../entities';
 
-export default class UsersRepository implements IUsersRepository {
+export class UsersRepository implements IUsersRepository {
   private readonly ormRepository: Repository<User>;
 
   constructor() {

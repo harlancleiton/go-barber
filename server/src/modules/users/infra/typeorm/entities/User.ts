@@ -8,10 +8,10 @@ import {
   BeforeInsert,
 } from 'typeorm';
 
-import { auth } from '../../../../../config';
+import { authConfig } from '../../../../../config';
 
 @Entity('users')
-export default class User {
+export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -35,6 +35,6 @@ export default class User {
 
   @BeforeInsert()
   async hashPassword(): Promise<void> {
-    this.password = await hash(this.password, auth.bcrypt.saltRounds);
+    this.password = await hash(this.password, authConfig.bcrypt.saltRounds);
   }
 }

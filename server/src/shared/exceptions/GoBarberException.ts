@@ -1,4 +1,4 @@
-export default class GoBarberException {
+export class GoBarberException {
   public readonly message: string;
 
   public readonly statusCode: number;

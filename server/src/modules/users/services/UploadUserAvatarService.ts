@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { join } from 'path';
 
-import { upload as uploadConfig } from '../../../config';
+import { uploadConfig } from '../../../config';
 import { GoBarberException } from '../../../shared/exceptions';
 import { User } from '../infra/typeorm/entities';
 import { IUsersRepository } from '../repositories';
@@ -11,7 +11,7 @@ interface Request {
   avatarFilename: string;
 }
 
-export default class UpdateUserAvatarService {
+export class UpdateUserAvatarService {
   constructor(private readonly usersRepository: IUsersRepository) {}
 
   public async execute({ user_id, avatarFilename }: Request): Promise<User> {
