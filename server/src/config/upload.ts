@@ -1,12 +1,12 @@
 import { randomBytes } from 'crypto';
 import multer from 'multer';
 
-import { path } from '../shared/helpers';
+import { tmpPath } from '../shared/helpers';
 
 export const uploadConfig = {
-  directory: path.tmpPath(),
+  directory: tmpPath(),
   storage: multer.diskStorage({
-    destination: path.tmpPath(),
+    destination: tmpPath(),
     filename: (request, file, callback) => {
       const fileHash = randomBytes(10).toString('hex');
       const fileName = `${fileHash}-${file.originalname}`;

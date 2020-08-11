@@ -1,5 +1,6 @@
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { injectable, inject } from 'tsyringe';
 
 import { authConfig } from '../../../config';
 import { GoBarberException } from '../../../shared/exceptions';
@@ -16,8 +17,12 @@ interface Response {
   token: string;
 }
 
+@injectable()
 export class AuthenticateUserService {
-  constructor(private readonly usersRepository: IUsersRepository) {}
+  constructor(
+    @inject('UsersRepository')
+    private readonly usersRepository: IUsersRepository,
+  ) {}
 
   public async execute({ email, password }: Request): Promise<Response> {
     const user = await this.usersRepository.findByEmail(email);

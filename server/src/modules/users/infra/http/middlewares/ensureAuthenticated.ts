@@ -3,7 +3,7 @@ import { verify } from 'jsonwebtoken';
 
 import { authConfig } from '../../../../../config';
 import { GoBarberException } from '../../../../../shared/exceptions';
-import UsersRepository from '../../typeorm/repositories/UsersRepository';
+import { UsersRepository } from '../../typeorm/repositories/UsersRepository';
 
 interface TokenPayload {
   iat: number;

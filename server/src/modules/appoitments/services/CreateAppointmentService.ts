@@ -1,4 +1,5 @@
 import { startOfHour } from 'date-fns';
+import { inject, injectable } from 'tsyringe';
 
 import { GoBarberException } from '../../../shared/exceptions';
 import { Appointment } from '../infra';
@@ -9,8 +10,10 @@ interface Request {
   date: Date;
 }
 
+@injectable()
 export class CreateAppointmentService {
   constructor(
+    @inject('AppoitmentsRepository')
     private readonly appointmentsRepository: IAppointmentsRepository,
   ) {}
 

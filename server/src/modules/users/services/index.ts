@@ -1,3 +1,3 @@
 export * from './AuthenticateUserService';
 export * from './CreateUserService';
-export * from './UploadUserAvatarService';
+export * from './UpdateUserAvatarService';

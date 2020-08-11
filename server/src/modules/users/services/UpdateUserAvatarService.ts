@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { join } from 'path';
+import { injectable, inject } from 'tsyringe';
 
 import { uploadConfig } from '../../../config';
 import { GoBarberException } from '../../../shared/exceptions';
@@ -11,8 +12,12 @@ interface Request {
   avatarFilename: string;
 }
 
+@injectable()
 export class UpdateUserAvatarService {
-  constructor(private readonly usersRepository: IUsersRepository) {}
+  constructor(
+    @inject('UsersRepository')
+    private readonly usersRepository: IUsersRepository,
+  ) {}
 
   public async execute({ user_id, avatarFilename }: Request): Promise<User> {
     const user = await this.usersRepository.findById(user_id);

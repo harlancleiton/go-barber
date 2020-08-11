@@ -3,6 +3,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 
 import '../typeorm';
+import '../../container';
 import { GoBarberException } from '../../exceptions';
 import { tmpPath } from '../../helpers';
 import { routes } from './routes';
