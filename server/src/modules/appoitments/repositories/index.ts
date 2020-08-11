@@ -1,1 +1,1 @@
-export { default as AppointmentsRepository } from './AppointmentsRepository';
+export { default as IAppointmentsRepository } from './IAppointmentsRepository';

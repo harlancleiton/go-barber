@@ -1,11 +1,10 @@
-import { getCustomRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
+import { auth } from '../../../config';
 import { GoBarberException } from '../../../shared/exceptions';
 import { User } from '../infra/typeorm/entities';
-import { auth } from '../../../config';
-import { UsersRepository } from '../repositories';
+import { IUsersRepository } from '../repositories';
 
 interface Request {
   email: string;
@@ -18,10 +17,10 @@ interface Response {
 }
 
 export default class AuthenticateUserService {
-  public async execute({ email, password }: Request): Promise<Response> {
-    const usersRepository = getCustomRepository(UsersRepository);
+  constructor(private readonly usersRepository: IUsersRepository) {}
 
-    const user = await usersRepository.findByEmail(email);
+  public async execute({ email, password }: Request): Promise<Response> {
+    const user = await this.usersRepository.findByEmail(email);
 
     if (!user)
       throw new GoBarberException('Incorrect email/password combination', 401);

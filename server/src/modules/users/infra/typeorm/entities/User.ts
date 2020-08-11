@@ -1,3 +1,4 @@
+import { hash } from 'bcryptjs';
 import {
   Entity,
   Column,
@@ -6,7 +7,6 @@ import {
   UpdateDateColumn,
   BeforeInsert,
 } from 'typeorm';
-import { hash } from 'bcryptjs';
 
 import { auth } from '../../../../../config';
 

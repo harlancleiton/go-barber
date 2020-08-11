@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
-import { getCustomRepository } from 'typeorm';
 
 import { auth } from '../../../../../config';
-import { UsersRepository, User } from '../../..';
 import { GoBarberException } from '../../../../../shared/exceptions';
+import UsersRepository from '../../typeorm/repositories/UsersRepository';
 
 interface TokenPayload {
   iat: number;
@@ -30,10 +29,12 @@ function ensureAutenthicated(
     request.auth = {
       token: decoded,
       userPrimaryKey: decoded.sub,
-      getUser: async (): Promise<User> => {
-        const usersRepository = getCustomRepository(UsersRepository);
+      getUser: async () => {
+        const usersRepository = new UsersRepository();
 
-        const user = await usersRepository.findOneOrFail(decoded.sub);
+        const user = await usersRepository.findById(decoded.sub);
+
+        if (!user) throw new GoBarberException('User not found', 404);
 
         return user;
       },

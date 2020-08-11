@@ -1,34 +1,33 @@
 import { startOfHour } from 'date-fns';
-import { getCustomRepository } from 'typeorm';
 
-import { Appointment } from '../infra';
-import { AppointmentsRepository } from '../repositories';
 import { GoBarberException } from '../../../shared/exceptions';
+import { Appointment } from '../infra';
+import { IAppointmentsRepository } from '../repositories';
 
 interface Request {
-  provider_id: string;
+  provider: string;
   date: Date;
 }
 
 class CreateAppointmentService {
-  public async execute({ provider_id, date }: Request): Promise<Appointment> {
-    const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+  constructor(
+    private readonly appointmentsRepository: IAppointmentsRepository,
+  ) {}
 
+  public async execute({ provider, date }: Request): Promise<Appointment> {
     const appointmentDate = startOfHour(date);
 
-    const findAppoitmentInSameDate = await appointmentsRepository.findByDate(
+    const findAppoitmentInSameDate = await this.appointmentsRepository.findByDate(
       appointmentDate,
     );
 
     if (findAppoitmentInSameDate)
       throw new GoBarberException('This appointment is already booked', 400);
 
-    const appointment = appointmentsRepository.create({
-      provider: { id: provider_id },
-      date: appointmentDate,
+    const appointment = await this.appointmentsRepository.create({
+      provider,
+      date,
     });
-
-    await appointmentsRepository.save(appointment);
 
     return appointment;
   }

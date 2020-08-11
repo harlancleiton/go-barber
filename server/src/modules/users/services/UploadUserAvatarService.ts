@@ -1,11 +1,10 @@
-import { getCustomRepository } from 'typeorm';
-import { join } from 'path';
 import fs from 'fs';
+import { join } from 'path';
 
-import { UsersRepository } from '../repositories';
+import { upload as uploadConfig } from '../../../config';
 import { GoBarberException } from '../../../shared/exceptions';
 import { User } from '../infra/typeorm/entities';
-import { upload as uploadConfig } from '../../../config';
+import { IUsersRepository } from '../repositories';
 
 interface Request {
   user_id: string;
@@ -13,10 +12,10 @@ interface Request {
 }
 
 export default class UpdateUserAvatarService {
-  public async execute({ user_id, avatarFilename }: Request): Promise<User> {
-    const usersRepository = getCustomRepository(UsersRepository);
+  constructor(private readonly usersRepository: IUsersRepository) {}
 
-    const user = await usersRepository.findOne(user_id);
+  public async execute({ user_id, avatarFilename }: Request): Promise<User> {
+    const user = await this.usersRepository.findById(user_id);
 
     if (!user)
       throw new GoBarberException(
@@ -34,7 +33,7 @@ export default class UpdateUserAvatarService {
 
     user.avatar = avatarFilename;
 
-    await usersRepository.save(user);
+    await this.usersRepository.save(user);
 
     return user;
   }
