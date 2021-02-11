@@ -3,8 +3,9 @@ import {
   TextInputProps,
   TextInput as TextInputBase,
   NativeSyntheticEvent,
-  TextInputFocusEventData,
+  TextInputFocusEventData
 } from 'react-native';
+
 import { useField } from '@unform/core';
 
 import { Container, TextInput, Icon } from './styles';
@@ -87,7 +88,7 @@ const Input: React.FC<InputProps> = ({
           inputRef.current.setNativeProps({ text: '' });
           inputRef.current.value = '';
         }
-      },
+      }
     });
   }, [fieldName, rawText, registerField]);
 

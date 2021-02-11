@@ -1,8 +1,8 @@
 module.exports = {
   hooks: {
-    'pre-commit': 'lint-staged',
+    'pre-commit': 'yarn workspaces run precommit',
     'prepare-commit-msg': 'exec < /dev/tty && git-cz --hook || true',
     'commit-msg': 'commitlint -E HUSKY_GIT_PARAMS',
-    'pre-push': 'yarn run test',
-  },
+    'pre-push': 'yarn run test && yarn run test:e2e'
+  }
 };

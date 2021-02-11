@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components/native';
 import { Feather } from '@expo/vector-icons';
+import styled, { css } from 'styled-components/native';
 
 import { FontFamily } from '../../utils';
 

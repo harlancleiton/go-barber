@@ -1,3 +1,6 @@
-/*.js
 node_modules
 dist
+.eslintrc.js
+clients/**/*.js
+server/**/*.js
+shared/**/*.js

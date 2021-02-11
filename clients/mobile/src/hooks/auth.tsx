@@ -3,7 +3,7 @@ import React, {
   useCallback,
   useState,
   useContext,
-  useEffect,
+  useEffect
 } from 'react';
 import { AsyncStorage } from 'react-native';
 
@@ -51,7 +51,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     async function loadAuthDate() {
       const [token, user] = await AsyncStorage.multiGet([
         '@GoBarber:token',
-        '@GoBarber:user',
+        '@GoBarber:user'
       ]);
 
       if (token[1] && user[1])
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
     await AsyncStorage.multiSet([
       ['@GoBarber:token', token],
-      ['@GoBarber:user', JSON.stringify(user)],
+      ['@GoBarber:user', JSON.stringify(user)]
     ]);
 
     setData({ token, user });
@@ -89,7 +89,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         signed: !!data?.user,
         signIn: handleSignIn,
         signOut: handleSignOut,
-        loading,
+        loading
       }}
     >
       {children}
