@@ -3,23 +3,39 @@ import { Router } from 'express';
 
 import { AppointmentRepository } from '~/repositories/AppointmentsRepository';
 import { CreateAppointmentService } from '~/services/CreateAppointmentService';
+import { FindAppointmentsService } from '~/services/FindAppointmentsService';
 
 export const appointmentsRouter = Router();
 
-appointmentsRouter.post('/', async (request, response) => {
-  const { provider, date } = request.body;
-
-  const parsedDate = parseISO(date);
-
+appointmentsRouter.get('/', async (request, response) => {
   const appointmentRepository = new AppointmentRepository();
-  const createAppointmentService = new CreateAppointmentService(
+  const findAppointmentsService = new FindAppointmentsService(
     appointmentRepository
   );
 
-  const appointment = await createAppointmentService.execute({
-    provider,
-    date: parsedDate
-  });
+  const appointments = await findAppointmentsService.execute();
 
-  return response.status(201).json(appointment);
+  return response.json(appointments);
+});
+
+appointmentsRouter.post('/', async (request, response) => {
+  try {
+    const { provider, date } = request.body;
+
+    const parsedDate = parseISO(date);
+
+    const appointmentRepository = new AppointmentRepository();
+    const createAppointmentService = new CreateAppointmentService(
+      appointmentRepository
+    );
+
+    const appointment = await createAppointmentService.execute({
+      provider,
+      date: parsedDate
+    });
+
+    return response.status(201).json(appointment);
+  } catch (error) {
+    return response.status(400).json({ error: error.message });
+  }
 });

@@ -15,4 +15,18 @@ export class AppointmentRepository {
 
     return appointment;
   }
+
+  async find(): Promise<Appointment[]> {
+    const appointments = await this.typeormRepository.find();
+
+    return appointments;
+  }
+
+  async findByDate(date: Date): Promise<Appointment | undefined> {
+    const appointment = await this.typeormRepository.findOne({
+      where: { date }
+    });
+
+    return appointment;
+  }
 }

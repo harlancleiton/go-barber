@@ -13,7 +13,14 @@ export class CreateAppointmentService {
   }: CreateAppointmentDto): Promise<Appointment> {
     const appointmentDate = startOfHour(date);
 
-    const appointment = this.appointmentRepository.create({
+    const findAppointmentInSameDate = await this.appointmentRepository.findByDate(
+      appointmentDate
+    );
+
+    if (findAppointmentInSameDate)
+      throw Error('This appointment is already booked');
+
+    const appointment = await this.appointmentRepository.create({
       provider,
       date: appointmentDate
     });
