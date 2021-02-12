@@ -13,6 +13,10 @@
       "clients/*",
       "server",
       "shared/*"
+    ],
+    "nohoist": [
+      "**/typeorm/**",
+      "**/typeorm"
     ]
   },
   "scripts": {
@@ -20,7 +24,6 @@
     "dev": "yarn workspaces run dev",
     "lint": "yarn workspaces run lint",
     "test": "yarn workspaces run test",
-    "test:e2e": "yarn workspaces run test:e2e",
     "release": "standard-version"
   },
   "devDependencies": {

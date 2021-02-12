@@ -1,1 +1,5 @@
-console.log('Hello World');
+import { createConnection } from 'typeorm';
+
+import './server';
+
+createConnection();

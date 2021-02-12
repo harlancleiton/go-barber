@@ -15,7 +15,6 @@
     "dev": "echo >> /dev/null",
     "lint": "eslint --ext=.ts --fix",
     "test": "echo >> /dev/null",
-    "test:e2e": "echo >> /dev/null",
     "precommit": "lint-staged"
   },
   "dependencies": {

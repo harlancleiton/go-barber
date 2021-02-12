@@ -5,6 +5,7 @@
   "license": "MIT",
   "main": "__generated__/AppEntry.js",
   "scripts": {
+    "build": "echo >> /dev/null",
     "dev": "expo start",
     "start": "expo start",
     "android": "expo start --android",
@@ -12,7 +13,6 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --passWithNoTests",
-    "test:e2e": "echo >> /dev/null",
     "lint": "eslint src --ext .ts,.tsx --fix",
     "postinstall": "expo-yarn-workspaces postinstall",
     "precommit": "lint-staged"
