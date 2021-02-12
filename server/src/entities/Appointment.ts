@@ -3,16 +3,25 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn
 } from 'typeorm';
+
+import { User } from './User';
 
 @Entity({ name: 'appointments' })
 export class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  provider: string;
+  @ManyToOne(() => User, {
+    nullable: false,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  @JoinColumn({ name: 'provider_id' })
+  provider: User;
 
   @Column('timestamp with time zone')
   date: Date;
