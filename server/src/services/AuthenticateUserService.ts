@@ -3,6 +3,7 @@ import { sign } from 'jsonwebtoken';
 
 import { authConfig } from '~/config/auth';
 import { User } from '~/entities/User';
+import { GoBarberException } from '~/exceptions/GoBarberException';
 import { UsersRepository } from '~/repositories/UsersRepository';
 
 interface ServiceRequest {
@@ -22,12 +23,13 @@ export class AuthenticateUserService {
   async execute({ email, password }: ServiceRequest): Promise<ServiceResponse> {
     const user = await this.usersRepository.findOneByEmail(email);
 
-    if (!user) throw new Error('Incorrect email/password combination');
+    if (!user)
+      throw new GoBarberException('Incorrect email/password combination', 401);
 
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched)
-      throw new Error('Incorrect email/password combination');
+      throw new GoBarberException('Incorrect email/password combination', 401);
 
     const { secret, ...signOptions } = authConfig.jwt.options;
 

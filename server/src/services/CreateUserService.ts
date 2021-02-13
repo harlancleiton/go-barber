@@ -2,6 +2,7 @@ import { hash } from 'bcryptjs';
 
 import { CreateUserDto } from '~/dtos/CreateUserDto';
 import { User } from '~/entities/User';
+import { GoBarberException } from '~/exceptions/GoBarberException';
 import { UsersRepository } from '~/repositories/UsersRepository';
 
 export class CreateUserService {
@@ -15,7 +16,8 @@ export class CreateUserService {
   }: CreateUserDto): Promise<User> {
     const findUserEmail = await this.usersRepository.findOneByEmail(email);
 
-    if (findUserEmail) throw new Error('Email address already used');
+    if (findUserEmail)
+      throw new GoBarberException('Email address already used', 400);
 
     const hashedPassword = await hash(password, 10);
 

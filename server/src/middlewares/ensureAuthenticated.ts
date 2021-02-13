@@ -5,6 +5,7 @@ import { getRepository } from 'typeorm';
 import { TokenPayload } from '~/@types/express';
 import { authConfig } from '~/config/auth';
 import { User } from '~/entities/User';
+import { GoBarberException } from '~/exceptions/GoBarberException';
 
 export async function ensureAuthenticated(
   request: Request,
@@ -14,8 +15,7 @@ export async function ensureAuthenticated(
   try {
     const authHeader = request.headers.authorization;
 
-    if (!authHeader)
-      response.status(401).json({ error: 'JWT token is missing' });
+    if (!authHeader) throw new GoBarberException('JWT token is missing', 401);
     else {
       const [, token] = authHeader.split(' ');
 
@@ -27,13 +27,13 @@ export async function ensureAuthenticated(
       const usersRepository = getRepository(User);
       const user = await usersRepository.findOne(decoded.sub);
 
-      if (!user) response.status(401).json({ error: 'User not found' });
+      if (!user) throw new GoBarberException('User not found', 401);
       else {
         request.auth = { user, token: decoded };
         next();
       }
     }
   } catch {
-    response.status(401).json({ error: 'Invalid JWT token' });
+    throw new GoBarberException('Invalid JWT token');
   }
 }

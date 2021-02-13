@@ -10,7 +10,7 @@ interface ServiceRequest {
   avatar: { filename: string };
 }
 
-export class UpdateAvatarService {
+export class UpdateUserAvatarService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async execute({ avatar, user }: ServiceRequest): Promise<void> {
