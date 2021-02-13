@@ -1,10 +1,14 @@
 import express from 'express';
 
+import { appConfig } from './config/app';
+import { uploadConfig } from './config/upload';
 import { routes } from './routes';
 
 const app = express();
 
 app.use(express.json());
+
+app.use(appConfig.uploadsRoute, express.static(uploadConfig.directory));
 
 app.use(routes);
 

@@ -9,6 +9,10 @@ export class UsersRepository {
     this.typeormRepository = getRepository(User);
   }
 
+  async save(user: User): Promise<User> {
+    return await this.typeormRepository.save(user);
+  }
+
   async create(partial: DeepPartial<User>): Promise<User> {
     const appointment = this.typeormRepository.create(partial);
     await this.typeormRepository.save(appointment);

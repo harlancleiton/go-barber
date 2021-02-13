@@ -27,6 +27,9 @@ export class User {
   @Column({ unique: true, length: 254 })
   password: string;
 
+  @Column({ unique: true, nullable: true })
+  avatar: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
