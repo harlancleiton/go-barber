@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { convertEmptyStringsToNull } from '~/middlewares';
+import { convertEmptyStringsToNull, ensureAuthenticated } from '~/middlewares';
 
 import { appointmentsRouter } from './appointments.routes';
 import { authRouter } from './auth.routes';
@@ -10,6 +10,8 @@ export const routes = Router();
 
 routes.use(convertEmptyStringsToNull);
 
-routes.use('/appointments', appointmentsRouter);
 routes.use('/auth', authRouter);
 routes.use('/users', usersRouter);
+
+routes.use(ensureAuthenticated);
+routes.use('/appointments', appointmentsRouter);

@@ -1,6 +1,7 @@
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
+import { authConfig } from '~/config/auth';
 import { User } from '~/entities/User';
 import { UsersRepository } from '~/repositories/UsersRepository';
 
@@ -28,12 +29,12 @@ export class AuthenticateUserService {
     if (!passwordMatched)
       throw new Error('Incorrect email/password combination');
 
-    // TODO add env
-    const appkey = 'gEBQpEpiHn5QS4zZQ8XcNCGbuAVbM6gT';
-    // TODO add env
-    const expiresIn = '1d';
+    const { secret, ...signOptions } = authConfig.jwt.options;
 
-    const token = sign({}, appkey, { subject: user.id, expiresIn });
+    const token = sign({}, authConfig.jwt.options.secret, {
+      subject: String(user[authConfig.jwt.uid]),
+      ...signOptions
+    });
 
     return { user, token, refreshToken: '' };
   }
