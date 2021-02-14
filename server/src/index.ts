@@ -1,7 +1,6 @@
 import 'reflect-metadata';
-
-import { createConnection } from 'typeorm';
-
-import './server';
+import { createConnection } from './shared/infra/typeorm';
 
 createConnection();
+
+import './shared/infra/http/server';

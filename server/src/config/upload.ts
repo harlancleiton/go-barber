@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import multer from 'multer';
 
-import { pathHelpers } from '~/helpers/path';
+import { pathHelpers } from '~/shared/helpers/path';
 
 interface UploadConfig {
   directory: string;
