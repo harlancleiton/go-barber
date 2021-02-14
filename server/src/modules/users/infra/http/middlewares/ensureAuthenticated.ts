@@ -1,49 +1,39 @@
 import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
+import { getRepository } from 'typeorm';
 
-import { authConfig } from '../../../../../config';
-import { GoBarberException } from '../../../../../shared/exceptions';
-import { UsersRepository } from '../../typeorm/repositories/UsersRepository';
+import { TokenPayload } from '~/@types/express';
+import { authConfig } from '~/config/auth';
+import { User } from '~/modules/users/infra/typeorm/entities';
+import { GoBarberException } from '~/shared/exceptions/GoBarberException';
 
-interface TokenPayload {
-  iat: number;
-  exp: number;
-  iss: string;
-  sub: string;
-}
-
-function ensureAutenthicated(
+export async function ensureAuthenticated(
   request: Request,
   response: Response,
-  next: NextFunction,
-): void {
-  const authHeader = request.headers.authorization;
-
-  if (!authHeader) throw new GoBarberException('JWT token is missing', 401);
-
-  const [, token] = authHeader.split(' ');
-
+  next: NextFunction
+): Promise<void> {
   try {
-    const decoded = verify(token, authConfig.jwt.secret) as TokenPayload;
+    const authHeader = request.headers.authorization;
 
-    request.auth = {
-      token: decoded,
-      userPrimaryKey: decoded.sub,
-      getUser: async () => {
-        const usersRepository = new UsersRepository();
+    if (!authHeader) throw new GoBarberException('JWT token is missing', 401);
+    else {
+      const [, token] = authHeader.split(' ');
 
-        const user = await usersRepository.findById(decoded.sub);
+      const decoded = verify(
+        token,
+        authConfig.jwt.options.secret
+      ) as TokenPayload;
 
-        if (!user) throw new GoBarberException('User not found', 404);
+      const usersRepository = getRepository(User);
+      const user = await usersRepository.findOne(decoded.sub);
 
-        return user;
-      },
-    };
-
-    return next();
+      if (!user) throw new GoBarberException('User not found', 401);
+      else {
+        request.auth = { user, token: decoded };
+        next();
+      }
+    }
   } catch {
-    throw new GoBarberException('Invalid JWT token', 401);
+    throw new GoBarberException('Invalid JWT token');
   }
 }
-
-export default ensureAutenthicated;

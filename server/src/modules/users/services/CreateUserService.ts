@@ -1,33 +1,42 @@
+import { hash } from 'bcryptjs';
 import { inject, injectable } from 'tsyringe';
 
-import { GoBarberException } from '../../../shared/exceptions';
-import { User } from '../infra/typeorm/entities';
-import { IUsersRepository } from '../repositories';
+import { IUser } from '~/modules/users/domain';
+import { CreateUserDto } from '~/modules/users/dtos/CreateUserDto';
+import { Providers } from '~/shared/container';
+import { GoBarberException } from '~/shared/exceptions';
 
-interface Request {
-  name: string;
-  email: string;
-  password: string;
-}
+import { IUserRepository } from '../repositories';
 
 @injectable()
 export class CreateUserService {
   constructor(
-    @inject('UsersRepository')
-    private readonly usersRepository: IUsersRepository,
+    @inject(Providers.USER_REPOSITORY)
+    private readonly usersRepository: IUserRepository
   ) {}
 
-  public async execute({ name, email, password }: Request): Promise<User> {
-    const checkUsersExists = await this.usersRepository.findByEmail(email);
+  public async execute({
+    firstname,
+    lastname,
+    email,
+    password
+  }: CreateUserDto): Promise<IUser> {
+    const findUserEmail = await this.usersRepository.findOneByEmail(email);
 
-    if (checkUsersExists)
+    if (findUserEmail)
       throw new GoBarberException('Email address already used', 400);
 
+    const hashedPassword = await hash(password, 10);
+
     const user = await this.usersRepository.create({
-      name,
+      firstname,
+      lastname,
       email,
-      password,
+      password: hashedPassword
     });
+
+    // @ts-ignore
+    delete user.password;
 
     return user;
   }

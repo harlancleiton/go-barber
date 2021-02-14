@@ -1,1 +1,1 @@
-export * from './ICreateUserDto';
+export * from './CreateUserDto';

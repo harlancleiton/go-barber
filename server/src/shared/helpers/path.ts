@@ -1,11 +1,34 @@
-import { resolve } from 'path';
+import path from 'path';
+
+import { appConfig } from '~/config/app';
+
+interface PathHelpers {
+  appRoot: () => string;
+  tmpPath: () => string;
+  uploadsPath: () => string;
+}
 
 function appRoot(): string {
-  return resolve(process.cwd(), 'src');
+  return process.cwd();
 }
 
 function tmpPath(): string {
-  return resolve(appRoot(), '..', 'tmp');
+  const tmpFolder = appConfig.paths.tmpFolder;
+
+  return path.resolve(appRoot(), tmpFolder);
 }
 
-export { appRoot, tmpPath };
+function uploadsPath(): string {
+  const uploadFolder = appConfig.paths.uploadsFolder;
+
+  if (uploadFolder.concatWithTmpFolder)
+    return path.resolve(appRoot(), tmpPath(), uploadFolder.path);
+
+  return path.resolve(appRoot(), uploadFolder.path);
+}
+
+export const pathHelpers: PathHelpers = {
+  appRoot,
+  tmpPath,
+  uploadsPath
+};

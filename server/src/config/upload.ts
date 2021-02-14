@@ -1,17 +1,28 @@
-import { randomBytes } from 'crypto';
+import crypto from 'crypto';
 import multer from 'multer';
 
-import { tmpPath } from '../shared/helpers';
+import { pathHelpers } from '~/shared/helpers/path';
 
-export const uploadConfig = {
-  directory: tmpPath(),
+interface UploadConfig {
+  directory: string;
+  storage: multer.StorageEngine;
+}
+
+const directory = pathHelpers.uploadsPath();
+
+export const uploadConfig: UploadConfig = {
+  directory,
   storage: multer.diskStorage({
-    destination: tmpPath(),
+    destination: directory,
     filename: (request, file, callback) => {
-      const fileHash = randomBytes(10).toString('hex');
-      const fileName = `${fileHash}-${file.originalname}`;
+      const randomString = crypto.randomBytes(16).toString('hex');
 
-      return callback(null, fileName);
-    },
-  }),
+      const [ext, ...originalnames] = file.originalname.split('.').reverse();
+      const originalname = originalnames.reverse().toString().replace(',', '-');
+
+      const filename = `${originalname}-${randomString}.${ext}`;
+
+      callback(null, filename);
+    }
+  })
 };

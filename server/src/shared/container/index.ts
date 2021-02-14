@@ -1,18 +1,23 @@
 import { container } from 'tsyringe';
 
-import {
-  AppointmentsRepository,
-  IAppointmentsRepository,
-} from '../../modules/appoitments';
-import { IUsersRepository } from '../../modules/users';
-import { UsersRepository } from '../../modules/users/infra/typeorm/repositories/UsersRepository';
+import { AppointmentRepository } from '~/modules/appointments/infra/typeorm';
+import { IAppointmentRepository } from '~/modules/appointments/repositories';
+import { UserRepository } from '~/modules/users/infra/typeorm';
+import { IUserRepository } from '~/modules/users/repositories';
 
-container.registerSingleton<IAppointmentsRepository>(
-  'AppoitmentsRepository',
-  AppointmentsRepository,
-);
+export enum Providers {
+  APPOINTMENT_REPOSITORY = 'IAppointmentRepository',
+  USER_REPOSITORY = 'IUserRepository'
+}
 
-container.registerSingleton<IUsersRepository>(
-  'UsersRepository',
-  UsersRepository,
-);
+export function registerProviders(): void {
+  container.registerSingleton<IAppointmentRepository>(
+    Providers.APPOINTMENT_REPOSITORY,
+    AppointmentRepository
+  );
+
+  container.registerSingleton<IUserRepository>(
+    Providers.USER_REPOSITORY,
+    UserRepository
+  );
+}

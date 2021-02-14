@@ -1,1 +1,1 @@
-export { default as ensureAuthenticated } from './ensureAuthenticated';
+export * from './ensureAuthenticated';

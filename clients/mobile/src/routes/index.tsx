@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
+
 import * as SplashScreen from 'expo-splash-screen';
 
 import { useAuth } from '../hooks';
-import AuthRoutes from './auth.routes';
 import AppRoutes from './app.routes';
+import AuthRoutes from './auth.routes';
 
 const Routes: React.FC = () => {
   const { signed, loading } = useAuth();

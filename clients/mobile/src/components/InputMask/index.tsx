@@ -32,7 +32,7 @@ const InputMask: React.ForwardRefRenderFunction<
       customTextInputProps={{
         ref: inputRef,
         rawText,
-        onInitialData: setText,
+        onInitialData: setText
       }}
       {...rest}
     />

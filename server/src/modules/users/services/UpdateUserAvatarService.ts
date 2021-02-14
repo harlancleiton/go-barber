@@ -1,45 +1,34 @@
 import fs from 'fs';
 import { join } from 'path';
-import { injectable, inject } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 
-import { uploadConfig } from '../../../config';
-import { GoBarberException } from '../../../shared/exceptions';
-import { User } from '../infra/typeorm/entities';
-import { IUsersRepository } from '../repositories';
+import { uploadConfig } from '~/config/upload';
+import { Providers } from '~/shared/container';
 
-interface Request {
-  user_id: string;
-  avatarFilename: string;
+import { IUser } from '../domain';
+import { IUserRepository } from '../repositories';
+
+interface ServiceRequest {
+  user: IUser;
+  avatar: { filename: string };
 }
 
 @injectable()
 export class UpdateUserAvatarService {
   constructor(
-    @inject('UsersRepository')
-    private readonly usersRepository: IUsersRepository,
+    @inject(Providers.USER_REPOSITORY)
+    private readonly usersRepository: IUserRepository
   ) {}
 
-  public async execute({ user_id, avatarFilename }: Request): Promise<User> {
-    const user = await this.usersRepository.findById(user_id);
-
-    if (!user)
-      throw new GoBarberException(
-        'Only authenticated users can change avatar',
-        401,
-      );
-
+  async execute({ avatar, user }: ServiceRequest): Promise<void> {
     if (user.avatar) {
       const userAvatarFilePath = join(uploadConfig.directory, user.avatar);
-
       const userAvatarFileExists = await fs.promises.stat(userAvatarFilePath);
 
       if (userAvatarFileExists) await fs.promises.unlink(userAvatarFilePath);
     }
 
-    user.avatar = avatarFilename;
-
+    user.avatar = avatar.filename;
     await this.usersRepository.save(user);
-
-    return user;
   }
 }

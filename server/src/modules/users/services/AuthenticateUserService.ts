@@ -1,31 +1,34 @@
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
-import { injectable, inject } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 
-import { authConfig } from '../../../config';
-import { GoBarberException } from '../../../shared/exceptions';
-import { User } from '../infra/typeorm/entities';
-import { IUsersRepository } from '../repositories';
+import { authConfig } from '~/config/auth';
+import { Providers } from '~/shared/container';
+import { GoBarberException } from '~/shared/exceptions/GoBarberException';
 
-interface Request {
+import { IUser } from '../domain';
+import { IUserRepository } from '../repositories';
+
+interface ServiceRequest {
   email: string;
   password: string;
 }
 
-interface Response {
-  user: User;
+interface ServiceResponse {
+  user: IUser;
   token: string;
+  refreshToken: string;
 }
 
 @injectable()
 export class AuthenticateUserService {
   constructor(
-    @inject('UsersRepository')
-    private readonly usersRepository: IUsersRepository,
+    @inject(Providers.USER_REPOSITORY)
+    private readonly usersRepository: IUserRepository
   ) {}
 
-  public async execute({ email, password }: Request): Promise<Response> {
-    const user = await this.usersRepository.findByEmail(email);
+  async execute({ email, password }: ServiceRequest): Promise<ServiceResponse> {
+    const user = await this.usersRepository.findOneByEmail(email);
 
     if (!user)
       throw new GoBarberException('Incorrect email/password combination', 401);
@@ -35,14 +38,13 @@ export class AuthenticateUserService {
     if (!passwordMatched)
       throw new GoBarberException('Incorrect email/password combination', 401);
 
-    const { secret, expiresIn } = authConfig.jwt;
+    const { secret, ...signOptions } = authConfig.jwt.options;
 
-    const token = sign({}, secret, {
-      subject: user.id,
-      expiresIn,
-      issuer: 'GoBarber',
+    const token = sign({}, authConfig.jwt.options.secret, {
+      subject: String(user[authConfig.jwt.uid]),
+      ...signOptions
     });
 
-    return { user, token };
+    return { user, token, refreshToken: '' };
   }
 }

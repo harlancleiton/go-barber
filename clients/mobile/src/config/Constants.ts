@@ -8,16 +8,16 @@ interface EnvProps {
 const ENV: { [key: string]: EnvProps } = {
   dev: {
     apiUrl: 'http://172.16.0.59:3333',
-    devHost: '172.16.0.59',
+    devHost: '172.16.0.59'
   },
   staging: {
     apiUrl: 'https://staging.gobarber.com.br',
-    devHost: undefined,
+    devHost: undefined
   },
   prod: {
     apiUrl: 'https://app.consultai.com.br',
-    devHost: undefined,
-  },
+    devHost: undefined
+  }
 };
 
 const getEnvVars = (env = Constants.manifest.releaseChannel): EnvProps => {

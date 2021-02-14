@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { Home } from '../pages';
@@ -9,7 +10,7 @@ const AppRoutes: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        cardStyle: { backgroundColor: '#312e38' },
+        cardStyle: { backgroundColor: '#312e38' }
       }}
     >
       <Stack.Screen name="Home" component={Home} />

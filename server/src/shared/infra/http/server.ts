@@ -1,41 +1,45 @@
-import cors from 'cors';
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Express } from 'express';
 import 'express-async-errors';
+import { Server } from 'http';
 
-import '../typeorm';
-import '../../container';
-import { GoBarberException } from '../../exceptions';
-import { tmpPath } from '../../helpers';
+import { appConfig } from '~/config/app';
+import { uploadConfig } from '~/config/upload';
+
+import { exceptionHandler } from './middlewares';
 import { routes } from './routes';
 
-const app = express();
+export class HttpServer {
+  private app: Express;
 
-app.use(cors());
-app.use(express.json());
+  constructor() {
+    this.app = express();
 
-app.use('/files', express.static(tmpPath()));
+    this.applyMiddlewares();
+    this.applyRoutes();
+    this.addExceptionHandler();
+  }
 
-app.use(routes);
+  private applyMiddlewares(): void {
+    this.app.use(express.json());
+  }
 
-app.use(
-  (
-    error: Error | GoBarberException,
-    request: Request,
-    response: Response,
-    _: NextFunction,
-  ) => {
-    if (error instanceof GoBarberException)
-      return response
-        .status(error.statusCode)
-        .json({ status: 'error', message: error.message });
+  private applyRoutes(): void {
+    this.app.use(
+      appConfig.uploadsRoute,
+      express.static(uploadConfig.directory)
+    );
 
-    return response
-      .status(500)
-      .json({ status: 'error', message: 'Internal Server Error' });
-  },
-);
+    this.app.use(routes);
+  }
 
-app.listen(3333, () => {
-  // eslint-disable-next-line no-console
-  console.log('Server started on port 3333');
-});
+  // TODO enable cors
+  // private enableCors(): void {}
+
+  private addExceptionHandler(): void {
+    this.app.use(exceptionHandler);
+  }
+
+  public listen(port: number, callback?: () => void): Server {
+    return this.app.listen(port, callback);
+  }
+}

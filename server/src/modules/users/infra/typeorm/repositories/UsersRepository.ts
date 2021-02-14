@@ -1,46 +1,35 @@
-import { Repository, getRepository } from 'typeorm';
+import { DeepPartial, getRepository, Repository } from 'typeorm';
 
-import { ICreateUserDto } from '../../../dtos';
-import { IUsersRepository } from '../../../repositories';
+import { IUserRepository } from '~/modules/users/repositories';
+
 import { User } from '../entities';
 
-export class UsersRepository implements IUsersRepository {
+export class UserRepository implements IUserRepository {
   private readonly ormRepository: Repository<User>;
 
   constructor() {
     this.ormRepository = getRepository(User);
   }
 
-  public async findById(id: string): Promise<User | undefined> {
-    const user = await this.ormRepository.findOne(id);
-
-    return user;
+  async save(user: User): Promise<User> {
+    return await this.ormRepository.save(user);
   }
 
-  public async findByEmail(email: string): Promise<User | undefined> {
-    const user = await this.ormRepository.findOne({
-      where: { email },
-    });
+  async create(partial: DeepPartial<User>): Promise<User> {
+    const appointment = this.ormRepository.create(partial);
+    await this.ormRepository.save(appointment);
 
-    return user;
+    return appointment;
   }
 
-  public async save(user: User): Promise<User> {
-    return this.ormRepository.save(user);
+  async find(): Promise<User[]> {
+    const appointments = await this.ormRepository.find();
+
+    return appointments;
   }
 
-  public async create({
-    email,
-    name,
-    password,
-  }: ICreateUserDto): Promise<User> {
-    const user = this.ormRepository.create({
-      email,
-      name,
-      password,
-    });
-
-    await this.save(user);
+  async findOneByEmail(email: string): Promise<User | undefined> {
+    const user = await this.ormRepository.findOne({ email });
 
     return user;
   }

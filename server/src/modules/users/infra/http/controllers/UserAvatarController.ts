@@ -1,15 +1,21 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { UpdateUserAvatarService } from '../../../services';
+import { UpdateUserAvatarService } from '~/modules/users/services';
 
 export class UserAvatarController {
-  public async update(request: Request, response: Response): Promise<Response> {
-    const uploadUserAvatar = container.resolve(UpdateUserAvatarService);
+  async update(request: Request, response: Response): Promise<Response> {
+    const updateUserAvatarService = container.resolve(UpdateUserAvatarService);
 
-    await uploadUserAvatar.execute({
-      user_id: request.auth?.userPrimaryKey as string,
-      avatarFilename: request.file.filename,
+    const { file, auth } = request;
+
+    if (!auth) return response.status(401).json();
+
+    const { user } = auth;
+
+    await updateUserAvatarService.execute({
+      user,
+      avatar: { filename: file.filename }
     });
 
     return response.status(204).json();

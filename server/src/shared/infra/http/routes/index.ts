@@ -1,14 +1,20 @@
 import { Router } from 'express';
 
-import { appointmentsRouter } from '../../../../modules/appoitments';
-import { authRouter, usersRouter } from '../../../../modules/users';
+import { appointmentsRouter } from '~/modules/appointments/infra/http';
+import {
+  authRouter,
+  ensureAuthenticated,
+  usersRouter
+} from '~/modules/users/infra/http';
 
-const routes = Router();
+import { convertEmptyStringsToNull } from '../middlewares';
 
-routes.use('/appointments', appointmentsRouter);
+export const routes = Router();
 
-routes.use('/users', usersRouter);
+routes.use(convertEmptyStringsToNull);
 
 routes.use('/auth', authRouter);
+routes.use('/users', usersRouter);
 
-export { routes };
+routes.use(ensureAuthenticated);
+routes.use('/appointments', appointmentsRouter);

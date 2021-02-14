@@ -3,16 +3,16 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
+  ScrollView
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { SubmitHandler, FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
 import * as Yup from 'yup';
 
 import LogoImg from '../../../assets/logo.png';
-
 import { Button, Input } from '../../components';
 import { useAuth } from '../../hooks';
 import { getValidationErrors } from '../../utils';
@@ -22,7 +22,7 @@ import {
   ForgotPassword,
   ForgotPasswordText,
   CreateAccountButton,
-  CreateAccountButtonText,
+  CreateAccountButtonText
 } from './styles';
 
 interface SignInFormData {
@@ -41,7 +41,7 @@ const SignIn: React.FC = () => {
   }, [navigation]);
 
   const handleSubmit: SubmitHandler<SignInFormData> = useCallback(
-    async (formData) => {
+    async formData => {
       try {
         formRef.current?.setErrors({});
 
@@ -49,7 +49,7 @@ const SignIn: React.FC = () => {
           email: Yup.string()
             .email('Digite um e-mail válido')
             .required('E-mail é obrigatório'),
-          password: Yup.string().required('Senha obrigatória'),
+          password: Yup.string().required('Senha obrigatória')
         });
 
         await schema.validate(formData, { abortEarly: false });

@@ -1,11 +1,18 @@
-import { User } from '../modules/users';
+import { IUser } from '~/modules/users/domain';
+
+export type TokenPayload = {
+  iat: number;
+  exp: number;
+  sub: string;
+};
 
 declare module 'express-serve-static-core' {
+  interface Auth {
+    user: IUser;
+    token: TokenPayload;
+  }
+
   export interface Request {
-    auth?: {
-      token: { iat: number; exp: number; iss: string; sub: string };
-      userPrimaryKey: string;
-      getUser: () => Promise<User>;
-    };
+    auth?: Auth;
   }
 }

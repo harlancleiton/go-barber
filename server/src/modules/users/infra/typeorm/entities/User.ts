@@ -1,30 +1,35 @@
-import { hash } from 'bcryptjs';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  BeforeInsert,
+  UpdateDateColumn
 } from 'typeorm';
 
-import { authConfig } from '../../../../../config';
+import { IUser } from '~/modules/users/domain';
 
-@Entity('users')
-export class User {
+@Entity({ name: 'users' })
+export class User implements IUser {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  name: string;
+  firstname: string;
 
   @Column()
+  lastname: string;
+
+  get fullname(): string {
+    return `${this.firstname} ${this.lastname}`;
+  }
+
+  @Column({ unique: true, length: 70 })
   email: string;
 
-  @Column()
+  @Column({ unique: true, length: 254 })
   password: string;
 
-  @Column()
+  @Column({ unique: true, nullable: true })
   avatar: string;
 
   @CreateDateColumn({ name: 'created_at' })
@@ -32,9 +37,4 @@ export class User {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
-
-  @BeforeInsert()
-  async hashPassword(): Promise<void> {
-    this.password = await hash(this.password, authConfig.bcrypt.saltRounds);
-  }
 }
