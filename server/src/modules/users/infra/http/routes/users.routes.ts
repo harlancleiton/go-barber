@@ -1,48 +1,17 @@
 import { Router } from 'express';
-import { container } from 'tsyringe';
 
-import {
-  CreateUserService,
-  UpdateUserAvatarService
-} from '~/modules/users/services';
 import { uploadFile } from '~/shared/infra/http/middlewares';
 
+import { UserAvatarController, UsersController } from '../controllers';
 import { ensureAuthenticated } from '../middlewares';
 
 export const usersRouter = Router();
 
-usersRouter.post('/', async (request, response) => {
-  const { firstname, lastname, email, password } = request.body;
+const usersController = new UsersController();
+const userAvatarController = new UserAvatarController();
 
-  const createUserService = container.resolve(CreateUserService);
-
-  const user = await createUserService.execute({
-    firstname,
-    lastname,
-    email,
-    password
-  });
-
-  return response.status(201).json(user);
-});
+usersRouter.post('/', usersController.store);
 
 usersRouter.use(ensureAuthenticated);
 
-usersRouter.patch(
-  '/avatar',
-  uploadFile('avatar'),
-  async (request, response) => {
-    const updateUserAvatarService = container.resolve(UpdateUserAvatarService);
-
-    const { file, auth } = request;
-    // @ts-ignore
-    const { user } = auth;
-
-    await updateUserAvatarService.execute({
-      user,
-      avatar: { filename: file.filename }
-    });
-
-    return response.status(204).json();
-  }
-);
+usersRouter.patch('/avatar', uploadFile('avatar'), userAvatarController.update);
