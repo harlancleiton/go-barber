@@ -1,13 +1,17 @@
 import { startOfHour } from 'date-fns';
+import { inject, injectable } from 'tsyringe';
 
+import { Providers } from '~/shared/container';
 import { GoBarberException } from '~/shared/exceptions/GoBarberException';
 
 import { IAppointment } from '../domain';
 import { CreateAppointmentDto } from '../dtos';
 import { IAppointmentRepository } from '../repositories';
 
+@injectable()
 export class CreateAppointmentService {
   constructor(
+    @inject(Providers.APPOINTMENT_REPOSITORY)
     private readonly appointmentsRepository: IAppointmentRepository
   ) {}
 
@@ -17,7 +21,7 @@ export class CreateAppointmentService {
   }: CreateAppointmentDto): Promise<IAppointment> {
     const appointmentDate = startOfHour(date);
 
-    const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(
+    const findAppointmentInSameDate = await this.appointmentsRepository.findOneByDate(
       appointmentDate
     );
 

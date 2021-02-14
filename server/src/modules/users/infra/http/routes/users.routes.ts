@@ -1,6 +1,6 @@
 import { Router } from 'express';
+import { container } from 'tsyringe';
 
-import { UserRepository } from '~/modules/users/infra/typeorm';
 import {
   CreateUserService,
   UpdateUserAvatarService
@@ -14,8 +14,7 @@ export const usersRouter = Router();
 usersRouter.post('/', async (request, response) => {
   const { firstname, lastname, email, password } = request.body;
 
-  const usersRepository = new UserRepository();
-  const createUserService = new CreateUserService(usersRepository);
+  const createUserService = container.resolve(CreateUserService);
 
   const user = await createUserService.execute({
     firstname,
@@ -33,10 +32,7 @@ usersRouter.patch(
   '/avatar',
   uploadFile('avatar'),
   async (request, response) => {
-    const usersRepository = new UserRepository();
-    const updateUserAvatarService = new UpdateUserAvatarService(
-      usersRepository
-    );
+    const updateUserAvatarService = container.resolve(UpdateUserAvatarService);
 
     const { file, auth } = request;
     // @ts-ignore

@@ -1,13 +1,19 @@
 import { hash } from 'bcryptjs';
+import { inject, injectable } from 'tsyringe';
 
 import { IUser } from '~/modules/users/domain';
 import { CreateUserDto } from '~/modules/users/dtos/CreateUserDto';
+import { Providers } from '~/shared/container';
 import { GoBarberException } from '~/shared/exceptions';
 
 import { IUserRepository } from '../repositories';
 
+@injectable()
 export class CreateUserService {
-  constructor(private readonly usersRepository: IUserRepository) {}
+  constructor(
+    @inject(Providers.USER_REPOSITORY)
+    private readonly usersRepository: IUserRepository
+  ) {}
 
   public async execute({
     firstname,

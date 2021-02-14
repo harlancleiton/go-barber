@@ -1,7 +1,9 @@
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { inject, injectable } from 'tsyringe';
 
 import { authConfig } from '~/config/auth';
+import { Providers } from '~/shared/container';
 import { GoBarberException } from '~/shared/exceptions/GoBarberException';
 
 import { IUser } from '../domain';
@@ -18,8 +20,12 @@ interface ServiceResponse {
   refreshToken: string;
 }
 
+@injectable()
 export class AuthenticateUserService {
-  constructor(private readonly usersRepository: IUserRepository) {}
+  constructor(
+    @inject(Providers.USER_REPOSITORY)
+    private readonly usersRepository: IUserRepository
+  ) {}
 
   async execute({ email, password }: ServiceRequest): Promise<ServiceResponse> {
     const user = await this.usersRepository.findOneByEmail(email);

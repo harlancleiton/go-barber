@@ -1,7 +1,9 @@
 import fs from 'fs';
 import { join } from 'path';
+import { inject, injectable } from 'tsyringe';
 
 import { uploadConfig } from '~/config/upload';
+import { Providers } from '~/shared/container';
 
 import { IUser } from '../domain';
 import { IUserRepository } from '../repositories';
@@ -11,8 +13,12 @@ interface ServiceRequest {
   avatar: { filename: string };
 }
 
+@injectable()
 export class UpdateUserAvatarService {
-  constructor(private readonly usersRepository: IUserRepository) {}
+  constructor(
+    @inject(Providers.USER_REPOSITORY)
+    private readonly usersRepository: IUserRepository
+  ) {}
 
   async execute({ avatar, user }: ServiceRequest): Promise<void> {
     if (user.avatar) {
