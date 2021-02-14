@@ -1,18 +1,20 @@
 import { hash } from 'bcryptjs';
 
+import { IUser } from '~/modules/users/domain';
 import { CreateUserDto } from '~/modules/users/dtos/CreateUserDto';
-import { User, UsersRepository } from '~/modules/users/infra/typeorm';
 import { GoBarberException } from '~/shared/exceptions';
 
+import { IUserRepository } from '../repositories';
+
 export class CreateUserService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(private readonly usersRepository: IUserRepository) {}
 
   public async execute({
     firstname,
     lastname,
     email,
     password
-  }: CreateUserDto): Promise<User> {
+  }: CreateUserDto): Promise<IUser> {
     const findUserEmail = await this.usersRepository.findOneByEmail(email);
 
     if (findUserEmail)

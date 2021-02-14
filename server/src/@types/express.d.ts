@@ -1,4 +1,4 @@
-import { User } from '~/entities/User';
+import { IUser } from '~/modules/users/domain';
 
 export type TokenPayload = {
   iat: number;
@@ -8,7 +8,7 @@ export type TokenPayload = {
 
 declare module 'express-serve-static-core' {
   interface Auth {
-    user: User;
+    user: IUser;
     token: TokenPayload;
   }
 

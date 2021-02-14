@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { UsersRepository } from '~/modules/users/infra/typeorm';
+import { UserRepository } from '~/modules/users/infra/typeorm';
 import {
   CreateUserService,
   UpdateUserAvatarService
@@ -14,7 +14,7 @@ export const usersRouter = Router();
 usersRouter.post('/', async (request, response) => {
   const { firstname, lastname, email, password } = request.body;
 
-  const usersRepository = new UsersRepository();
+  const usersRepository = new UserRepository();
   const createUserService = new CreateUserService(usersRepository);
 
   const user = await createUserService.execute({
@@ -33,7 +33,7 @@ usersRouter.patch(
   '/avatar',
   uploadFile('avatar'),
   async (request, response) => {
-    const usersRepository = new UsersRepository();
+    const usersRepository = new UserRepository();
     const updateUserAvatarService = new UpdateUserAvatarService(
       usersRepository
     );

@@ -2,15 +2,17 @@ import fs from 'fs';
 import { join } from 'path';
 
 import { uploadConfig } from '~/config/upload';
-import { User, UsersRepository } from '~/modules/users/infra/typeorm';
+
+import { IUser } from '../domain';
+import { IUserRepository } from '../repositories';
 
 interface ServiceRequest {
-  user: User;
+  user: IUser;
   avatar: { filename: string };
 }
 
 export class UpdateUserAvatarService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(private readonly usersRepository: IUserRepository) {}
 
   async execute({ avatar, user }: ServiceRequest): Promise<void> {
     if (user.avatar) {

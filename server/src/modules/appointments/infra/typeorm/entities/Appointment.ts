@@ -8,10 +8,11 @@ import {
   JoinColumn
 } from 'typeorm';
 
+import { IAppointment } from '~/modules/appointments/domain';
 import { User } from '~/modules/users/infra/typeorm/entities';
 
 @Entity({ name: 'appointments' })
-export class Appointment {
+export class Appointment implements IAppointment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

@@ -41,6 +41,7 @@ module.exports = {
       'error',
       { ignoreRestSiblings: true }
     ],
+    '@typescript-eslint/interface-name-prefix': 'off',
     'import-helpers/order-imports': [
       'warn',
       {

@@ -2,8 +2,10 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
 import { authConfig } from '~/config/auth';
-import { User, UsersRepository } from '~/modules/users/infra/typeorm';
 import { GoBarberException } from '~/shared/exceptions/GoBarberException';
+
+import { IUser } from '../domain';
+import { IUserRepository } from '../repositories';
 
 interface ServiceRequest {
   email: string;
@@ -11,13 +13,13 @@ interface ServiceRequest {
 }
 
 interface ServiceResponse {
-  user: User;
+  user: IUser;
   token: string;
   refreshToken: string;
 }
 
 export class AuthenticateUserService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(private readonly usersRepository: IUserRepository) {}
 
   async execute({ email, password }: ServiceRequest): Promise<ServiceResponse> {
     const user = await this.usersRepository.findOneByEmail(email);
