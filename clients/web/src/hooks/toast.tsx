@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
+
 import { uuid } from 'uuidv4';
 
 import { ToastContainer } from '../components';
@@ -25,7 +26,7 @@ interface ToastProviderProps {
 
 export const ToastProvider: React.FC<ToastProviderProps> = ({
   children,
-  autoClose = 4000,
+  autoClose = 4000
 }) => {
   const [messages, setMessages] = useState<ToastMessage[]>([]);
 
@@ -35,7 +36,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
 
       const toast: ToastMessage = { id, title, type, description };
 
-      setMessages((state) => [...state, toast]);
+      setMessages(state => [...state, toast]);
 
       return toast;
     },
@@ -43,7 +44,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
   );
 
   const handleRemoveToast = useCallback((id: string) => {
-    setMessages((state) => state.filter((message) => message.id !== id));
+    setMessages(state => state.filter(message => message.id !== id));
   }, []);
 
   return (
@@ -51,7 +52,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
       value={{
         autoClose,
         addToast: handleAddToast,
-        removeToast: handleRemoveToast,
+        removeToast: handleRemoveToast
       }}
     >
       {children}

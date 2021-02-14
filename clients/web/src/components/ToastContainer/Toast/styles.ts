@@ -1,5 +1,6 @@
-import styled, { css } from 'styled-components';
 import { animated } from 'react-spring';
+
+import styled, { css } from 'styled-components';
 
 type ToastType = 'info' | 'success' | 'warning' | 'error';
 

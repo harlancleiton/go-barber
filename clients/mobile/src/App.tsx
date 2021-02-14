@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
+// TODO add expo-status-bar
 import { StatusBar, Text } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';

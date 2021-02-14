@@ -69,7 +69,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         user: data?.user,
         signed: !!data?.user,
         signIn: handleSignIn,
-        signOut: handleSignOut,
+        signOut: handleSignOut
       }}
     >
       {children}
