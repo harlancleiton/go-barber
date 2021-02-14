@@ -3,7 +3,7 @@ import React from 'react';
 import useAuth, { AuthProvider } from './auth';
 import useToast, {
   ToastProvider,
-  ToastMessage as ToastMessageType,
+  ToastMessage as ToastMessageType
 } from './toast';
 
 const AppProvider: React.FC = ({ children }) => (

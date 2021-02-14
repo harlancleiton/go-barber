@@ -1,12 +1,12 @@
 import React, { useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+
 import { SubmitHandler, FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 
 import logoImg from '../../assets/logo.svg';
-
 import { Button, Input } from '../../components';
 import { useAuth, useToast } from '../../hooks';
 import { getValidationErrors } from '../../utils';
@@ -24,7 +24,7 @@ const SignIn: React.FC = () => {
   const { addToast } = useToast();
 
   const handleSubmit: SubmitHandler<FormData> = useCallback(
-    async (formData) => {
+    async formData => {
       try {
         formRef.current?.setErrors({});
 
@@ -32,7 +32,7 @@ const SignIn: React.FC = () => {
           email: Yup.string()
             .email('Digite um e-mail válido')
             .required('E-mail é obrigatório'),
-          password: Yup.string().required('Senha obrigatória'),
+          password: Yup.string().required('Senha obrigatória')
         });
 
         await schema.validate(formData, { abortEarly: false });
@@ -51,7 +51,7 @@ const SignIn: React.FC = () => {
         addToast({
           title: 'Erro na autenticação',
           type: 'error',
-          description: 'Ocorreu um erro ao fazer logon, cheque as credenciais',
+          description: 'Ocorreu um erro ao fazer logon, cheque as credenciais'
         });
       }
     },

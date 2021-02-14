@@ -3,7 +3,7 @@ import {
   FiAlertCircle,
   FiCheckCircle,
   FiInfo,
-  FiXCircle,
+  FiXCircle
 } from 'react-icons/fi';
 
 import { ToastMessage, useToast } from '../../../hooks';
@@ -17,7 +17,7 @@ interface ToastProps {
 const icons = {
   error: <FiAlertCircle size={24} />,
   info: <FiInfo size={24} />,
-  success: <FiCheckCircle size={24} />,
+  success: <FiCheckCircle size={24} />
 };
 
 const Toast: React.FC<ToastProps> = ({ message, style }) => {

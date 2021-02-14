@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Route as BaseRoute,
   RouteProps as BaseRouteProps,
-  Redirect,
+  Redirect
 } from 'react-router-dom';
 
 import { useAuth } from '../hooks';

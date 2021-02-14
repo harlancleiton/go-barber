@@ -5,6 +5,7 @@ import React, {
   useContext,
   useEffect
 } from 'react';
+// TODO add @react-native-async-storage/async-storage
 import { AsyncStorage } from 'react-native';
 
 import { api } from '../services';

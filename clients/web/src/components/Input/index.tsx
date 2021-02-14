@@ -3,10 +3,11 @@ import React, {
   useRef,
   useEffect,
   useState,
-  useCallback,
+  useCallback
 } from 'react';
 import { IconBaseProps } from 'react-icons';
 import { FiAlertCircle } from 'react-icons/fi';
+
 import { useField } from '@unform/core';
 
 import { Container, Error } from './styles';
