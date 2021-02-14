@@ -1,23 +1,44 @@
-import express from 'express';
+import express, { Express } from 'express';
+import { Server } from 'http';
 
-import 'express-async-errors';
 import { appConfig } from '~/config/app';
 import { uploadConfig } from '~/config/upload';
 
 import { exceptionHandler } from './middlewares';
 import { routes } from './routes';
 
-const app = express();
+export class HttpServer {
+  private app: Express;
 
-app.use(express.json());
+  constructor() {
+    this.app = express();
 
-app.use(appConfig.uploadsRoute, express.static(uploadConfig.directory));
+    this.applyMiddlewares();
+    this.applyRoutes();
+    this.addExceptionHandler();
+  }
 
-app.use(routes);
+  private applyMiddlewares(): void {
+    this.app.use(express.json());
+  }
 
-app.use(exceptionHandler);
+  private applyRoutes(): void {
+    this.app.use(
+      appConfig.uploadsRoute,
+      express.static(uploadConfig.directory)
+    );
 
-app.listen(3333, () => {
-  // eslint-disable-next-line no-console
-  console.log('Server started on port 3333!');
-});
+    this.app.use(routes);
+  }
+
+  // TODO enable cors
+  // private enableCors(): void {}
+
+  private addExceptionHandler(): void {
+    this.app.use(exceptionHandler);
+  }
+
+  public listen(port: number, callback?: () => void): Server {
+    return this.app.listen(port, callback);
+  }
+}
