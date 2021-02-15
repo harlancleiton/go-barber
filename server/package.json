@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "0.1.0",
-  "main": "__generated__/AppEntry.js",
+  "main": "index.ts",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
@@ -9,7 +9,7 @@
     "start": "node dist",
     "lint": "eslint src --ext=.ts --fix",
     "precommit": "lint-staged",
-    "test": "echo >> /dev/null",
+    "test": "jest",
     "typeorm": "ts-node-dev node_modules/.bin/typeorm"
   },
   "dependencies": {
