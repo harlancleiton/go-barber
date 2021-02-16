@@ -1,9 +1,7 @@
-import fs from 'fs';
-import { join } from 'path';
 import { inject, injectable } from 'tsyringe';
 
-import { uploadConfig } from '~/config/upload';
 import { Providers } from '~/shared/container';
+import { IStorageProvider } from '~/shared/container/providers';
 
 import { IUser } from '../domain';
 import { IUserRepository } from '../repositories';
@@ -17,18 +15,16 @@ interface ServiceRequest {
 export class UpdateUserAvatarService {
   constructor(
     @inject(Providers.USER_REPOSITORY)
-    private readonly usersRepository: IUserRepository
+    private readonly usersRepository: IUserRepository,
+    @inject(Providers.STORAGE_PROVIDER)
+    private readonly storageProvider: IStorageProvider
   ) {}
 
   async execute({ avatar, user }: ServiceRequest): Promise<void> {
-    if (user.avatar) {
-      const userAvatarFilePath = join(uploadConfig.directory, user.avatar);
-      const userAvatarFileExists = await fs.promises.stat(userAvatarFilePath);
+    if (user.avatar) await this.storageProvider.delete(user.avatar);
 
-      if (userAvatarFileExists) await fs.promises.unlink(userAvatarFilePath);
-    }
-
-    user.avatar = avatar.filename;
+    const avatarFilename = await this.storageProvider.save(avatar.filename);
+    user.avatar = avatarFilename;
     await this.usersRepository.save(user);
   }
 }

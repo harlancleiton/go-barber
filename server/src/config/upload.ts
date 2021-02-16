@@ -8,7 +8,7 @@ interface UploadConfig {
   storage: multer.StorageEngine;
 }
 
-const directory = pathHelpers.uploadsPath();
+const directory = pathHelpers.tmpPath();
 
 export const uploadConfig: UploadConfig = {
   directory,

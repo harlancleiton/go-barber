@@ -1,6 +1,6 @@
+import { FakeHashProvider } from '~/shared/container/providers';
 import { GoBarberException } from '~/shared/exceptions';
 import { factories } from '~/shared/factories';
-import { FakeHashProvider } from '~/shared/providers';
 
 import { FakeUsersRepository } from '../repositories/fakes';
 import { CreateUserService } from './CreateUserService';

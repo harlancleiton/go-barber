@@ -3,8 +3,8 @@ import { inject, injectable } from 'tsyringe';
 
 import { authConfig } from '~/config/auth';
 import { Providers } from '~/shared/container';
+import { IHashProvider } from '~/shared/container/providers';
 import { GoBarberException } from '~/shared/exceptions/GoBarberException';
-import { IHashProvider } from '~/shared/providers';
 
 import { IUser } from '../domain';
 import { IUserRepository } from '../repositories';
