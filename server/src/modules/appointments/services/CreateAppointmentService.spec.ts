@@ -3,7 +3,7 @@ import { startOfHour } from 'date-fns';
 import { GoBarberException } from '~/shared/exceptions';
 import { factories } from '~/shared/factories';
 
-import { FakeAppointmentRepository } from '../repositories/fakes/FakeAppointmentRepository';
+import { FakeAppointmentRepository } from '../repositories/fakes';
 import { CreateAppointmentService } from './CreateAppointmentService';
 
 describe('CreateAppointmentService', () => {

@@ -10,7 +10,7 @@
     "lint": "eslint src --ext=.ts --fix",
     "precommit": "lint-staged",
     "test": "jest",
-    "typeorm": "ts-node-dev node_modules/.bin/typeorm"
+    "typeorm": "ts-node-dev -r tsconfig-paths/register node_modules/.bin/typeorm"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
