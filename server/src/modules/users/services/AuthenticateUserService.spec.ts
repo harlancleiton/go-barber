@@ -1,11 +1,6 @@
-const mockedCompare = jest.fn();
-
-jest.mock('bcryptjs', () => ({
-  compare: mockedCompare
-}));
-
 import { GoBarberException } from '~/shared/exceptions';
 import { factories } from '~/shared/factories';
+import { FakeHashProvider } from '~/shared/providers';
 
 import { FakeUsersRepository } from '../repositories/fakes';
 import { AuthenticateUserService } from './AuthenticateUserService';
@@ -15,15 +10,17 @@ describe('AuthenticateUserService', () => {
     const { email, password } = factories.user.build();
 
     const usersRepository = new FakeUsersRepository();
+    const hashProvider = new FakeHashProvider();
     const authenticateUserService = new AuthenticateUserService(
-      usersRepository
+      usersRepository,
+      hashProvider
     );
 
     jest
       .spyOn(usersRepository, 'findOneByEmail')
       .mockImplementation(async () => factories.user.build());
 
-    mockedCompare.mockResolvedValue(Promise.resolve(true));
+    jest.spyOn(hashProvider, 'compare').mockImplementation(async () => true);
 
     const { user, token, refreshToken } = await authenticateUserService.execute(
       {
@@ -41,8 +38,10 @@ describe('AuthenticateUserService', () => {
     const { email, password } = factories.user.build();
 
     const usersRepository = new FakeUsersRepository();
+    const hashProvider = new FakeHashProvider();
     const authenticateUserService = new AuthenticateUserService(
-      usersRepository
+      usersRepository,
+      hashProvider
     );
 
     jest
@@ -61,15 +60,17 @@ describe('AuthenticateUserService', () => {
     const { email, password } = factories.user.build();
 
     const usersRepository = new FakeUsersRepository();
+    const hashProvider = new FakeHashProvider();
     const authenticateUserService = new AuthenticateUserService(
-      usersRepository
+      usersRepository,
+      hashProvider
     );
 
     jest
       .spyOn(usersRepository, 'findOneByEmail')
       .mockImplementation(async () => factories.user.build());
 
-    mockedCompare.mockResolvedValue(Promise.resolve(false));
+    jest.spyOn(hashProvider, 'compare').mockImplementation(async () => false);
 
     expect(
       authenticateUserService.execute({

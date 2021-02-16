@@ -1,10 +1,10 @@
-import { hash } from 'bcryptjs';
 import { inject, injectable } from 'tsyringe';
 
 import { IUser } from '~/modules/users/domain';
 import { CreateUserDto } from '~/modules/users/dtos/CreateUserDto';
 import { Providers } from '~/shared/container';
 import { GoBarberException } from '~/shared/exceptions';
+import { IHashProvider } from '~/shared/providers';
 
 import { IUserRepository } from '../repositories';
 
@@ -12,7 +12,9 @@ import { IUserRepository } from '../repositories';
 export class CreateUserService {
   constructor(
     @inject(Providers.USER_REPOSITORY)
-    private readonly usersRepository: IUserRepository
+    private readonly usersRepository: IUserRepository,
+    @inject(Providers.HASH_PROVIDER)
+    private readonly hashProvider: IHashProvider
   ) {}
 
   public async execute({
@@ -26,7 +28,7 @@ export class CreateUserService {
     if (findUserEmail)
       throw new GoBarberException('Email address already used', 400);
 
-    const hashedPassword = await hash(password, 10);
+    const hashedPassword = await this.hashProvider.generate(password);
 
     const user = await this.usersRepository.create({
       firstname,

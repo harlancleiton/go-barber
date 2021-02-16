@@ -1,5 +1,6 @@
 import { GoBarberException } from '~/shared/exceptions';
 import { factories } from '~/shared/factories';
+import { FakeHashProvider } from '~/shared/providers';
 
 import { FakeUsersRepository } from '../repositories/fakes';
 import { CreateUserService } from './CreateUserService';
@@ -9,7 +10,11 @@ describe('CreateUserService', () => {
     const { firstname, lastname, email, password } = factories.user.build();
 
     const usersRepository = new FakeUsersRepository();
-    const createUsersService = new CreateUserService(usersRepository);
+    const hashProvider = new FakeHashProvider();
+    const createUsersService = new CreateUserService(
+      usersRepository,
+      hashProvider
+    );
 
     const user = await createUsersService.execute({
       firstname,
@@ -26,7 +31,11 @@ describe('CreateUserService', () => {
     const { firstname, lastname, email, password } = factories.user.build();
 
     const usersRepository = new FakeUsersRepository();
-    const createUsersService = new CreateUserService(usersRepository);
+    const hashProvider = new FakeHashProvider();
+    const createUsersService = new CreateUserService(
+      usersRepository,
+      hashProvider
+    );
 
     jest
       .spyOn(usersRepository, 'findOneByEmail')

@@ -1,10 +1,10 @@
-import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { inject, injectable } from 'tsyringe';
 
 import { authConfig } from '~/config/auth';
 import { Providers } from '~/shared/container';
 import { GoBarberException } from '~/shared/exceptions/GoBarberException';
+import { IHashProvider } from '~/shared/providers';
 
 import { IUser } from '../domain';
 import { IUserRepository } from '../repositories';
@@ -24,7 +24,9 @@ interface ServiceResponse {
 export class AuthenticateUserService {
   constructor(
     @inject(Providers.USER_REPOSITORY)
-    private readonly usersRepository: IUserRepository
+    private readonly usersRepository: IUserRepository,
+    @inject(Providers.HASH_PROVIDER)
+    private readonly hashProvider: IHashProvider
   ) {}
 
   async execute({ email, password }: ServiceRequest): Promise<ServiceResponse> {
@@ -33,7 +35,10 @@ export class AuthenticateUserService {
     if (!user)
       throw new GoBarberException('Incorrect email/password combination', 401);
 
-    const passwordMatched = await compare(password, user.password);
+    const passwordMatched = await this.hashProvider.compare(
+      password,
+      user.password
+    );
 
     if (!passwordMatched)
       throw new GoBarberException('Incorrect email/password combination', 401);
