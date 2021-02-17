@@ -2,10 +2,14 @@
 <img  alt="gobarber"  src="./assets/banner.png"  width="auto"  heigth="auto"/>
 </div>
 
+<div align="center" style="margin: 20px;">
+
 [![GitHub license](https://img.shields.io/github/license/harlancleiton/go-barber?style=flat-square)](https://github.com/harlancleiton/go-barber/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-<h4 align="center">
+</div>
+
+<h4 align="center" style="margin-bottom: 20px;">
 🚧 Status 🚀 Em construção... 🚧
 </h4>
 
