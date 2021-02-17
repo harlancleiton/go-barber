@@ -58,9 +58,12 @@ Este repositório utiliza a estrutura de monorepo, mantido através do [Yarn Wor
     $ cd mobile
     $ cd web
 
+    # Recursos compartilhados entre os projetos:
+    $ cd shared
+
 ## Defina as variáveis de ambiente
 
-- Dentro de cada projeto existe um arquivo chamado `.env.example` copie o conteúdo dele em um novo arquivo chamado `.env`; no `server` é necessário informar ao [TypeORM](https://typeorm.io/) nosso banco de dados, para isso crie um arquivo `ormconfig.json`, para isso use o arquivo `ormconfig.example.json` como guia.
+- Dentro de cada projeto existe um arquivo chamado `.env.example` copie o conteúdo dele em um novo arquivo chamado `.env`; no `server` é necessário informar ao [TypeORM](https://typeorm.io/) nosso banco de dados, para isso crie um arquivo `ormconfig.json`, use o arquivo `ormconfig.example.json` como guia.
 - Para executar os testes deve ser criado um arquivo `.env.test` com o mesmo conteúdo (mas com as configurações do ambiente de execução de testes)
 
 ### Executando o projeto
