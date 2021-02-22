@@ -15,8 +15,10 @@ import {
 export enum Providers {
   APPOINTMENT_REPOSITORY = 'IAppointmentRepository',
   USER_REPOSITORY = 'IUserRepository',
+  USER_TOKENS_REPOSITORY = 'IUserTokensRepository',
   HASH_PROVIDER = 'IHashProvider',
-  STORAGE_PROVIDER = 'IStorageProvider'
+  STORAGE_PROVIDER = 'IStorageProvider',
+  MAIL_PROVIDER = 'MailProvider'
 }
 
 export function registerProviders(): void {
