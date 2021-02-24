@@ -4,6 +4,7 @@ import { appointmentsRouter } from '~/modules/appointments/infra/http';
 import {
   authRouter,
   ensureAuthenticated,
+  passwordRouter,
   usersRouter
 } from '~/modules/users/infra/http';
 
@@ -15,6 +16,7 @@ routes.use(convertEmptyStringsToNull);
 
 routes.use('/auth', authRouter);
 routes.use('/users', usersRouter);
+routes.use('/password', passwordRouter);
 
 routes.use(ensureAuthenticated);
 routes.use('/appointments', appointmentsRouter);
