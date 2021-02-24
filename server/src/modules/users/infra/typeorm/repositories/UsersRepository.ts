@@ -1,5 +1,6 @@
 import { DeepPartial, getRepository, Repository } from 'typeorm';
 
+import { FindOneOptions } from '~/@types';
 import { IUserRepository } from '~/modules/users/repositories';
 
 import { User } from '../entities';
@@ -30,6 +31,12 @@ export class UserRepository implements IUserRepository {
 
   async findOneByEmail(email: string): Promise<User | undefined> {
     const user = await this.ormRepository.findOne({ email });
+
+    return user;
+  }
+
+  async findOne(options: FindOneOptions<User>): Promise<User | undefined> {
+    const user = await this.ormRepository.findOne(options);
 
     return user;
   }

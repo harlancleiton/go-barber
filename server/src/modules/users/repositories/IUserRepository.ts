@@ -1,4 +1,4 @@
-import { DeepPartial } from '~/@types';
+import { DeepPartial, FindOneOptions } from '~/@types';
 
 import { IUser } from '../domain';
 
@@ -8,4 +8,6 @@ export interface IUserRepository {
   save(appointment: IUser): Promise<IUser>;
 
   findOneByEmail(email: string): Promise<IUser | undefined>;
+
+  findOne(options: FindOneOptions<IUser>): Promise<IUser | undefined>;
 }
