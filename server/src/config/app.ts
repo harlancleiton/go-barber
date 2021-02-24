@@ -1,5 +1,6 @@
 interface AppConfig {
   appKey: string;
+  forgotPasswordTokenExpiresIn: number;
   paths: {
     tmpFolder: string;
     uploadsFolder: {
@@ -13,6 +14,7 @@ interface AppConfig {
 export const appConfig: AppConfig = {
   // TODO add env
   appKey: 'gEBQpEpiHn5QS4zZQ8XcNCGbuAVbM6gT',
+  forgotPasswordTokenExpiresIn: 2,
   paths: {
     tmpFolder: 'tmp',
     uploadsFolder: {

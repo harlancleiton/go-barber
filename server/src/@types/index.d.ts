@@ -5,3 +5,19 @@ export declare type DeepPartial<T> = {
     ? ReadonlyArray<DeepPartial<U>>
     : DeepPartial<T[P]> | T[P];
 };
+
+export declare type FindConditions<T> = {
+  [P in keyof T]?: FindConditions<T[P]>;
+};
+
+export interface FindOneOptions<Entity = any> {
+  select?: (keyof Entity)[];
+
+  where?: FindConditions<Entity>;
+
+  relations?: string[];
+
+  order?: {
+    [P in EntityFieldsNames<Entity>]?: 'ASC' | 'DESC' | 1 | -1;
+  };
+}
