@@ -2,8 +2,10 @@ import { container } from 'tsyringe';
 
 import { AppointmentRepository } from '~/modules/appointments/infra/typeorm';
 import { IAppointmentRepository } from '~/modules/appointments/repositories';
-import { UserRepository } from '~/modules/users/infra/typeorm';
-import { UserTokensRepository } from '~/modules/users/infra/typeorm/repositories/UserTokensRepository';
+import {
+  UserRepository,
+  UserTokensRepository
+} from '~/modules/users/infra/typeorm';
 import {
   IUserRepository,
   IUserTokensRepository
@@ -12,8 +14,10 @@ import {
 import {
   BCryptHashProvider,
   DiskStorageProvider,
+  EtherealMailProvider,
   IHashProvider,
-  IStorageProvider
+  IStorageProvider,
+  MailProvider
 } from './providers';
 
 export enum Providers {
@@ -44,6 +48,11 @@ export function registerProviders(): void {
   container.registerSingleton<IHashProvider>(
     Providers.HASH_PROVIDER,
     BCryptHashProvider
+  );
+
+  container.registerInstance<MailProvider>(
+    Providers.MAIL_PROVIDER,
+    new EtherealMailProvider()
   );
 
   container.registerSingleton<IStorageProvider>(

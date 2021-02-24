@@ -34,8 +34,10 @@ export class ResetPasswordService {
       relations: ['user']
     });
 
-    if (!userToken) throw new GoBarberException('User token does not exists');
-    if (!userToken.user) throw new GoBarberException('User does not exists');
+    if (!userToken)
+      throw new GoBarberException('User token does not exists', 404);
+    if (!userToken.user)
+      throw new GoBarberException('User does not exists', 404);
 
     const expiresIn = subHours(
       new Date(),

@@ -27,11 +27,15 @@ export class ForgotPasswordService {
 
     if (!user) throw new GoBarberException('User not found', 404);
 
-    const token = await this.userTokensRepository.create({
+    const userToken = await this.userTokensRepository.create({
       type: UserTokenType.FORGOT_PASSWORD,
       user
     });
 
-    await this.mailProvider.sendMail(user, { context: { token } });
+    await this.mailProvider.sendMail(user, {
+      context: { token: userToken },
+      subject: 'Recuperar senha',
+      text: `Pedido de recuperação de senha. Token: ${userToken.token}`
+    });
   }
 }
