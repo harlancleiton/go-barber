@@ -1,4 +1,4 @@
-import { DeepPartial } from '~/@types';
+import { DeepPartial, FindOneOptions } from '~/@types';
 import { factories } from '~/shared/factories';
 
 import { IUser } from '../../domain';
@@ -35,5 +35,9 @@ export class FakeUsersRepository implements IUserRepository {
     const user = this.users.find(user => user.email === email);
 
     return user;
+  }
+
+  async findOne(options: FindOneOptions<IUser>): Promise<IUser | undefined> {
+    return factories.user.build(options.where);
   }
 }
