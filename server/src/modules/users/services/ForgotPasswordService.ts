@@ -1,3 +1,4 @@
+import { resolve } from 'path';
 import { inject, injectable } from 'tsyringe';
 
 import { Providers } from '~/shared/container';
@@ -32,10 +33,13 @@ export class ForgotPasswordService {
       user
     });
 
+    // TODO add .env
+    const link = `http://localhost:3333/reset-password?token=${userToken.token}`;
+
     await this.mailProvider.sendMail(user, {
-      context: { token: userToken },
-      subject: 'Recuperar senha',
-      text: `Pedido de recuperação de senha. Token: ${userToken.token}`
+      context: { token: userToken.token, user, link },
+      subject: '[GoBarber] Recuperação de senha',
+      template: resolve(__dirname, '..', 'views', 'forgotpassword.hbs')
     });
   }
 }

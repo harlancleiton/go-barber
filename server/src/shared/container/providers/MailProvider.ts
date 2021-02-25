@@ -7,6 +7,7 @@ export interface Address {
 export interface AttachmentLikeObject {
   path: string;
 }
+
 export interface SendMailOptions {
   to?: string | Address | Array<string | Address>;
   from?: string | Address;
@@ -15,9 +16,6 @@ export interface SendMailOptions {
   html?: string | Buffer;
   sender?: string | Address;
   raw?: string | Buffer;
-  context?: {
-    [name: string]: any;
-  };
   template?: string;
   attachments?: {
     filename: string;
@@ -26,6 +24,19 @@ export interface SendMailOptions {
     contentType?: string;
     cid?: string;
   }[];
+}
+
+export interface TextSendMailOptions extends SendMailOptions {
+  text: string | Buffer | AttachmentLikeObject;
+  template?: undefined;
+}
+
+export interface HTMLSendMailOptions extends SendMailOptions {
+  template: string;
+  context?: {
+    [key: string]: any;
+  };
+  text?: undefined;
 }
 
 interface SentMailInfo {
@@ -40,5 +51,8 @@ interface SentMailInfo {
 }
 
 export interface MailProvider {
-  sendMail(user: IUser, options: SendMailOptions): Promise<SentMailInfo>;
+  sendMail(
+    user: IUser,
+    options: TextSendMailOptions | HTMLSendMailOptions
+  ): Promise<SentMailInfo>;
 }

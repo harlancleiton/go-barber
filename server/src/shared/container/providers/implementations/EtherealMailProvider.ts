@@ -1,24 +1,41 @@
-import nodemailer from 'nodemailer';
+import {
+  createTestAccount,
+  createTransport,
+  Transporter,
+  TestAccount,
+  getTestMessageUrl
+} from 'nodemailer';
+import { inject, injectable } from 'tsyringe';
 
+import { mailConfig } from '~/config/mail';
 import { IUser } from '~/modules/users/domain';
 
-import { MailProvider, SendMailOptions } from '../MailProvider';
+import {
+  MailProvider,
+  HTMLSendMailOptions,
+  TextSendMailOptions
+} from '../MailProvider';
+import { MailTemplateProvider } from '../MailTemplateProvider';
 
+@injectable()
 export class EtherealMailProvider implements MailProvider {
-  private client: nodemailer.Transporter;
+  private client: Transporter;
 
-  constructor() {
+  constructor(
+    @inject('MailTemplateProvider')
+    private readonly mailTemplateProvider: MailTemplateProvider
+  ) {
     this.createAccount().then(account => {
       this.createTransport(account);
     });
   }
 
-  private async createAccount(): Promise<nodemailer.TestAccount> {
-    return await nodemailer.createTestAccount();
+  private async createAccount(): Promise<TestAccount> {
+    return await createTestAccount();
   }
 
-  private createTransport(account: nodemailer.TestAccount): void {
-    const transporter = nodemailer.createTransport({
+  private createTransport(account: TestAccount): void {
+    const transporter = createTransport({
       host: account.smtp.host,
       port: account.smtp.port,
       secure: account.smtp.secure,
@@ -31,14 +48,25 @@ export class EtherealMailProvider implements MailProvider {
     this.client = transporter;
   }
 
-  async sendMail(user: IUser, options: SendMailOptions): Promise<any> {
+  async sendMail(
+    user: IUser,
+    options: TextSendMailOptions | HTMLSendMailOptions
+  ): Promise<any> {
     const to = `${user.fullname} <${user.email}>`;
+    const from = mailConfig.smtpSender;
 
-    const message = await this.client.sendMail({ to, ...options });
+    let html: string | undefined;
+    if (options.template)
+      html = await this.mailTemplateProvider.parse({
+        pathTemplate: options.template,
+        context: options.context
+      });
+
+    const message = await this.client.sendMail({ to, from, html, ...options });
 
     // TODO add Logger
     // eslint-disable-next-line no-console
-    console.log('Preview URL: ', nodemailer.getTestMessageUrl(message));
+    console.log('Preview URL: ', getTestMessageUrl(message));
 
     return message;
   }

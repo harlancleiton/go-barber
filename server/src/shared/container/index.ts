@@ -19,6 +19,8 @@ import {
   IStorageProvider,
   MailProvider
 } from './providers';
+import { HandlebarsMailTemplateProvider } from './providers/implementations/HandlebarsMailTemplateProvider';
+import { MailTemplateProvider } from './providers/MailTemplateProvider';
 
 export enum Providers {
   APPOINTMENT_REPOSITORY = 'AppointmentRepository',
@@ -26,7 +28,8 @@ export enum Providers {
   USER_TOKENS_REPOSITORY = 'UserTokensRepository',
   HASH_PROVIDER = 'HashProvider',
   STORAGE_PROVIDER = 'StorageProvider',
-  MAIL_PROVIDER = 'MailProvider'
+  MAIL_PROVIDER = 'MailProvider',
+  MAIL_TEMPLATE_PROVIDER = 'MailTemplateProvider'
 }
 
 export function registerProviders(): void {
@@ -50,9 +53,14 @@ export function registerProviders(): void {
     BCryptHashProvider
   );
 
+  container.registerSingleton<MailTemplateProvider>(
+    Providers.MAIL_TEMPLATE_PROVIDER,
+    HandlebarsMailTemplateProvider
+  );
+
   container.registerInstance<MailProvider>(
     Providers.MAIL_PROVIDER,
-    new EtherealMailProvider()
+    container.resolve(EtherealMailProvider)
   );
 
   container.registerSingleton<IStorageProvider>(

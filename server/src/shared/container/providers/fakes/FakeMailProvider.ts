@@ -6,8 +6,9 @@ export class FakeMailProvider implements MailProvider {
   private messages: SendMailOptions[] = [];
 
   async sendMail(user: IUser, options: SendMailOptions): Promise<any> {
-    this.messages.push({ to: user.email, ...options });
+    const message = { to: user.email, ...options };
+    this.messages.push(message);
 
-    return options;
+    return message;
   }
 }
