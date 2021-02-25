@@ -1,20 +1,27 @@
-import { FakeHashProvider } from '~/shared/container/providers';
+import { FakeHashProvider, IHashProvider } from '~/shared/container/providers';
 import { GoBarberException } from '~/shared/exceptions';
 import { factories } from '~/shared/factories';
 
+import { IUserRepository } from '../repositories';
 import { FakeUsersRepository } from '../repositories/fakes';
 import { AuthenticateUserService } from './AuthenticateUserService';
 
 describe('AuthenticateUserService', () => {
-  it('should be able to authenticate', async () => {
-    const { email, password } = factories.user.build();
+  let usersRepository: IUserRepository;
+  let hashProvider: IHashProvider;
+  let authenticateUserService: AuthenticateUserService;
 
-    const usersRepository = new FakeUsersRepository();
-    const hashProvider = new FakeHashProvider();
-    const authenticateUserService = new AuthenticateUserService(
+  beforeEach(() => {
+    usersRepository = new FakeUsersRepository();
+    hashProvider = new FakeHashProvider();
+    authenticateUserService = new AuthenticateUserService(
       usersRepository,
       hashProvider
     );
+  });
+
+  it('should be able to authenticate', async () => {
+    const { email, password } = factories.user.build();
 
     jest
       .spyOn(usersRepository, 'findOneByEmail')
@@ -37,13 +44,6 @@ describe('AuthenticateUserService', () => {
   it('should not be able to authenticate with non existing user', async () => {
     const { email, password } = factories.user.build();
 
-    const usersRepository = new FakeUsersRepository();
-    const hashProvider = new FakeHashProvider();
-    const authenticateUserService = new AuthenticateUserService(
-      usersRepository,
-      hashProvider
-    );
-
     jest
       .spyOn(usersRepository, 'findOneByEmail')
       .mockImplementation(async () => undefined);
@@ -58,13 +58,6 @@ describe('AuthenticateUserService', () => {
 
   it('should not be able to authenticate with wrong password', async () => {
     const { email, password } = factories.user.build();
-
-    const usersRepository = new FakeUsersRepository();
-    const hashProvider = new FakeHashProvider();
-    const authenticateUserService = new AuthenticateUserService(
-      usersRepository,
-      hashProvider
-    );
 
     jest
       .spyOn(usersRepository, 'findOneByEmail')
