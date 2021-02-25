@@ -3,16 +3,22 @@ import { startOfHour } from 'date-fns';
 import { GoBarberException } from '~/shared/exceptions';
 import { factories } from '~/shared/factories';
 
+import { IAppointmentRepository } from '../repositories';
 import { FakeAppointmentRepository } from '../repositories/fakes';
 import { CreateAppointmentService } from './CreateAppointmentService';
 
 describe('CreateAppointmentService', () => {
-  it('should be able to create a new appointment', async () => {
-    const appointmentsRepository = new FakeAppointmentRepository();
-    const createAppointmentService = new CreateAppointmentService(
+  let appointmentsRepository: IAppointmentRepository;
+  let createAppointmentService: CreateAppointmentService;
+
+  beforeEach(() => {
+    appointmentsRepository = new FakeAppointmentRepository();
+    createAppointmentService = new CreateAppointmentService(
       appointmentsRepository
     );
+  });
 
+  it('should be able to create a new appointment', async () => {
     const date = factories.faker.date.future();
     const provider = factories.faker.random.uuid();
 
@@ -27,25 +33,21 @@ describe('CreateAppointmentService', () => {
   });
 
   it('should not be able to create two appointments on the same time', async () => {
-    const appointmentsRepository = new FakeAppointmentRepository();
-    const createAppointmentService = new CreateAppointmentService(
-      appointmentsRepository
-    );
-
     const date = factories.faker.date.future();
     const provider = factories.faker.random.uuid();
 
     jest
       .spyOn(appointmentsRepository, 'findOneByDate')
       .mockImplementation(async () => factories.appointment.build());
+    jest.spyOn(appointmentsRepository, 'create');
 
-    expect(async () => {
-      await createAppointmentService.execute({
+    await expect(
+      createAppointmentService.execute({
         date,
         provider
-      });
+      })
+    ).rejects.toBeInstanceOf(GoBarberException);
 
-      expect(appointmentsRepository.create).not.toBeCalled();
-    }).rejects.toBeInstanceOf(GoBarberException);
+    expect(appointmentsRepository.create).not.toBeCalled();
   });
 });

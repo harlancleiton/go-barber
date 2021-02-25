@@ -1,20 +1,28 @@
+import { IStorageProvider } from '~/shared/container/providers';
 import { FakeStorageProvider } from '~/shared/container/providers/fakes/FakeStorageProvider';
 import { factories } from '~/shared/factories';
 
+import { IUserRepository } from '../repositories';
 import { FakeUsersRepository } from '../repositories/fakes';
 import { UpdateUserAvatarService } from './UpdateUserAvatarService';
 
 describe('UpdateUserAvatarService', () => {
-  it('should be able to update a user avatar', async () => {
-    const user = factories.user.build({ avatar: null });
-    const avatar = { filename: factories.faker.system.fileName() };
+  let usersRepository: IUserRepository;
+  let storageProvider: IStorageProvider;
+  let updateUserAvatarService: UpdateUserAvatarService;
 
-    const usersRepository = new FakeUsersRepository();
-    const storageProvider = new FakeStorageProvider();
-    const updateUserAvatarService = new UpdateUserAvatarService(
+  beforeEach(() => {
+    usersRepository = new FakeUsersRepository();
+    storageProvider = new FakeStorageProvider();
+    updateUserAvatarService = new UpdateUserAvatarService(
       usersRepository,
       storageProvider
     );
+  });
+
+  it('should be able to update a user avatar', async () => {
+    const user = factories.user.build({ avatar: null });
+    const avatar = { filename: factories.faker.system.fileName() };
 
     jest.spyOn(usersRepository, 'save').mockImplementation(jest.fn());
     jest
@@ -33,13 +41,6 @@ describe('UpdateUserAvatarService', () => {
     const user = factories.user.build();
     const oldAvatar = user.avatar;
     const avatar = { filename: factories.faker.system.fileName() };
-
-    const usersRepository = new FakeUsersRepository();
-    const storageProvider = new FakeStorageProvider();
-    const updateUserAvatarService = new UpdateUserAvatarService(
-      usersRepository,
-      storageProvider
-    );
 
     jest.spyOn(usersRepository, 'save').mockImplementation(jest.fn());
     jest.spyOn(storageProvider, 'delete').mockImplementation(jest.fn());
