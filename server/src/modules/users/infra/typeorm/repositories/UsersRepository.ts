@@ -1,6 +1,7 @@
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Not, Repository } from 'typeorm';
 
 import { DeepPartial, FindOneOptions } from '~/@types';
+import { FindProvidersDto } from '~/modules/users/dtos';
 import { IUserRepository } from '~/modules/users/repositories';
 
 import { User } from '../entities';
@@ -27,14 +28,6 @@ export class UserRepository implements IUserRepository<User> {
     return this.ormRepository.merge(mergeIntoEntity, ...entityLikes);
   }
 
-  async find(): Promise<User[]> {
-    const users = await this.ormRepository.find();
-
-    this.ormRepository.merge(users[0], { email: '' });
-
-    return users;
-  }
-
   async findOneByEmail(email: string): Promise<User | undefined> {
     const user = await this.ormRepository.findOne({ email });
 
@@ -45,5 +38,13 @@ export class UserRepository implements IUserRepository<User> {
     const user = await this.ormRepository.findOne(options);
 
     return user;
+  }
+
+  async findProviders({ excludeUser }: FindProvidersDto): Promise<User[]> {
+    const providers = await this.ormRepository.find({
+      where: excludeUser && { id: Not(excludeUser.id) }
+    });
+
+    return providers;
   }
 }
