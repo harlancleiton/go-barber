@@ -8,7 +8,7 @@ export function exceptionHandler(
   response: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
-) {
+): Response {
   if (error instanceof GoBarberException)
     return response.status(error.statusCode).json({
       error: error.message,
