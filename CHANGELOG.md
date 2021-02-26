@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/harlancleiton/go-barber/compare/v0.1.1...v0.1.2) (2021-02-26)
+
+
+### Features
+
+* **server:** add EtherealMailProvider ([665ddc9](https://github.com/harlancleiton/go-barber/commit/665ddc9f1037c744fbadeb1aa7dee46cbdf2e41e))
+* **server:** add findOne in UsersRepository ([1c1de8f](https://github.com/harlancleiton/go-barber/commit/1c1de8fefbdb00491498fca4ba0ee41d0e48839e))
+* **server:** add FindProfileService ([a350674](https://github.com/harlancleiton/go-barber/commit/a35067420fb62574984eb654d342650a90e78534))
+* **server:** add ForgotPasswordService ([12109f4](https://github.com/harlancleiton/go-barber/commit/12109f4eedf0ae2ecdab2060365c9d85b1d11b3e))
+* **server:** add MailTemplateProvider ([89a1726](https://github.com/harlancleiton/go-barber/commit/89a17266b2eb8a889fc3cf27a2580f3bd1274061))
+* **server:** add MeController ([ffb6740](https://github.com/harlancleiton/go-barber/commit/ffb6740688864880ad0c67d729d0eea49c8d9ad3))
+* **server:** add password routes ([f06a3be](https://github.com/harlancleiton/go-barber/commit/f06a3bec2a0e65e52b6154ead3a397df7df1d2e9))
+* **server:** add ResetPasswordService ([6d6f578](https://github.com/harlancleiton/go-barber/commit/6d6f578683c74461d8db0560e8dfdadd96fb6f4b))
+* **server:** add UpdateUserService ([6856d7f](https://github.com/harlancleiton/go-barber/commit/6856d7fab3234704fd35ee21feec85b88d8fee3c))
+
 ### 0.1.1 (2021-02-17)
 
 
