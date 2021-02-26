@@ -19,6 +19,15 @@ export class FakeUsersRepository implements IUserRepository {
     return user;
   }
 
+  merge(mergeIntoEntity: IUser, ...entityLikes: DeepPartial<IUser>[]): IUser {
+    const user = factories.user.build(
+      Object.assign(mergeIntoEntity, ...entityLikes)
+    );
+    this.users.push(user);
+
+    return user;
+  }
+
   async create(partial: DeepPartial<IUser>): Promise<IUser> {
     const user = factories.user.build(partial);
 
