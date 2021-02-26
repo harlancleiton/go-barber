@@ -1,32 +1,38 @@
-import { DeepPartial, getRepository, Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 
-import { FindOneOptions } from '~/@types';
+import { DeepPartial, FindOneOptions } from '~/@types';
 import { IUserRepository } from '~/modules/users/repositories';
 
 import { User } from '../entities';
 
-export class UserRepository implements IUserRepository {
+export class UserRepository implements IUserRepository<User> {
   private readonly ormRepository: Repository<User>;
 
   constructor() {
     this.ormRepository = getRepository(User);
   }
 
+  async create(partial: DeepPartial<User>): Promise<User> {
+    const user = this.ormRepository.create(partial);
+    await this.ormRepository.save(user);
+
+    return user;
+  }
+
   async save(user: User): Promise<User> {
     return await this.ormRepository.save(user);
   }
 
-  async create(partial: DeepPartial<User>): Promise<User> {
-    const appointment = this.ormRepository.create(partial);
-    await this.ormRepository.save(appointment);
-
-    return appointment;
+  merge(mergeIntoEntity: User, ...entityLikes: DeepPartial<User>[]): User {
+    return this.ormRepository.merge(mergeIntoEntity, ...entityLikes);
   }
 
   async find(): Promise<User[]> {
-    const appointments = await this.ormRepository.find();
+    const users = await this.ormRepository.find();
 
-    return appointments;
+    this.ormRepository.merge(users[0], { email: '' });
+
+    return users;
   }
 
   async findOneByEmail(email: string): Promise<User | undefined> {

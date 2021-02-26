@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { appointmentsRouter } from '~/modules/appointments/infra/http';
 import {
   authRouter,
-  ensureAuthenticated,
+  meRouter,
   passwordRouter,
   usersRouter
 } from '~/modules/users/infra/http';
@@ -16,7 +16,7 @@ routes.use(convertEmptyStringsToNull);
 
 routes.use('/auth', authRouter);
 routes.use('/users', usersRouter);
+routes.use('/me', meRouter);
 routes.use('/password', passwordRouter);
 
-routes.use(ensureAuthenticated);
 routes.use('/appointments', appointmentsRouter);

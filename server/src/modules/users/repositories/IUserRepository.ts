@@ -2,12 +2,14 @@ import { DeepPartial, FindOneOptions } from '~/@types';
 
 import { IUser } from '../domain';
 
-export interface IUserRepository {
-  create(partial: DeepPartial<IUser>): Promise<IUser>;
+export interface IUserRepository<T = IUser> {
+  create(partial: DeepPartial<T>): Promise<T>;
 
-  save(appointment: IUser): Promise<IUser>;
+  save(appointment: T): Promise<T>;
 
-  findOneByEmail(email: string): Promise<IUser | undefined>;
+  merge(mergeIntoEntity: T, ...entityLikes: DeepPartial<T>[]): T;
 
-  findOne(options: FindOneOptions<IUser>): Promise<IUser | undefined>;
+  findOneByEmail(email: string): Promise<T | undefined>;
+
+  findOne(options: FindOneOptions<T>): Promise<T | undefined>;
 }
