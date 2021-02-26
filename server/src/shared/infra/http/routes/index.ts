@@ -1,6 +1,9 @@
 import { Router } from 'express';
 
-import { appointmentsRouter } from '~/modules/appointments/infra/http';
+import {
+  appointmentsRouter,
+  providersRouter
+} from '~/modules/appointments/infra/http';
 import {
   authRouter,
   meRouter,
@@ -20,3 +23,4 @@ routes.use('/me', meRouter);
 routes.use('/password', passwordRouter);
 
 routes.use('/appointments', appointmentsRouter);
+routes.use('/providers', providersRouter);
