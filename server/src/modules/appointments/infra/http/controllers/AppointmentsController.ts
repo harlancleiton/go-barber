@@ -4,7 +4,7 @@ import { container } from 'tsyringe';
 
 import {
   CreateAppointmentService,
-  FindAppointmentsService
+  ListProviderMonthAvailabilityService
 } from '~/modules/appointments/services';
 
 export class AppointmentsController {
@@ -26,9 +26,21 @@ export class AppointmentsController {
   }
 
   async index(request: Request, response: Response): Promise<Response> {
-    const findAppointmentsService = container.resolve(FindAppointmentsService);
+    const listProviderMonthAvailabilityService = container.resolve(
+      ListProviderMonthAvailabilityService
+    );
 
-    const appointments = await findAppointmentsService.execute();
+    if (!request.auth) return response.status(401).json();
+
+    const { user } = request.auth;
+
+    const { month, year } = request.query;
+
+    const appointments = await listProviderMonthAvailabilityService.execute({
+      provider: user,
+      month: Number(month),
+      year: Number(year)
+    });
 
     return response.json(appointments);
   }

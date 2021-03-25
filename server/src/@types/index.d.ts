@@ -21,3 +21,8 @@ export interface FindOneOptions<Entity = any> {
     [P in EntityFieldsNames<Entity>]?: 'ASC' | 'DESC' | 1 | -1;
   };
 }
+
+export interface FindManyOptions<Entity = any> extends FindOneOptions<Entity> {
+  skip?: number;
+  take?: number;
+}
